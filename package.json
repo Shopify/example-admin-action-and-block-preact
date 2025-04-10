@@ -20,8 +20,10 @@
   },
   "type": "module",
   "engines": {
-    "node": "^18.20 || ^20.10 || >=21.0.0"
+    "pnpm": ">=10.2.0",
+    "node": ">=22.13.1"
   },
+  "packageManager": "pnpm@10.2.0",
   "dependencies": {
     "@prisma/client": "^6.2.1",
     "@remix-run/dev": "^2.16.1",
@@ -71,6 +73,5 @@
     "@graphql-codegen/client-preset": "4.7.0",
     "@graphql-codegen/typescript-operations": "4.5.0"
   },
-  "author": "bill",
-  "packageManager": "pnpm@9.14.2+sha512.6e2baf77d06b9362294152c851c4f278ede37ab1eba3a55fda317a4a17b209f4dbb973fb250a77abc463a341fcb1f17f17cfa24091c4eb319cda0d9b84278387"
+  "author": "bill"
 }
