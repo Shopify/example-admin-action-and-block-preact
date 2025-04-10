@@ -1,13 +1,19 @@
 /// <reference types="../../../shopify.d.ts" />
 
+// [START build-admin-block.create-ui-one]
 import { render } from "preact";
 import { useEffect, useMemo, useState } from "preact/hooks";
-import { updateIssues, getIssues } from "./utils";
+// [END build-admin-block.create-ui-one]
 
+// [START build-admin-block.connect-api-one]
+import { updateIssues, getIssues } from "./utils";
+// [END build-admin-block.connect-api-one]
+
+// [START build-admin-block.create-ui-two]
 export default function extension() {
   render(<Extension />, document.body);
 }
-
+// [END build-admin-block.create-ui-two]
 const PAGE_SIZE = 3;
 
 function Extension() {
@@ -18,11 +24,11 @@ function Extension() {
   const [issues, setIssues] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
 
+  // [START build-admin-block.get-initial-data]
   const productId = data.selected[0].id;
   const issuesCount = issues.length;
   const totalPages = issuesCount / PAGE_SIZE;
 
-  // [START build-admin-block.connect-api-one]
   useEffect(() => {
     (async function getProductInfo() {
       // Load the product's metafield of type issues
@@ -53,7 +59,9 @@ function Extension() {
       currentPage * PAGE_SIZE,
     );
   }, [issuesCount, issues, currentPage]);
+  // [END build-admin-block.get-initial-data]
 
+  // [START build-admin-block.add-change-and-delete-handlers]
   const handleChange = async (id, value) => {
     // Update the local state of the extension to reflect changes
     setIssues((currentIssues) => {
@@ -82,6 +90,7 @@ function Extension() {
     // Commit changes to the database
     await updateIssues(productId, newIssues);
   };
+  // [END build-admin-block.add-change-and-delete-handlers]
 
   const onSubmit = (event) => {
     // Commit changes to the database
@@ -89,6 +98,15 @@ function Extension() {
   };
 
   const onReset = () => {};
+
+  // [START build-admin-block.create-ui-three]
+  if (loading) {
+    return (
+      <s-stack direction="inline">
+        <s-spinner />
+      </s-stack>
+    );
+  }
 
   return (
     <s-admin-block title="My Block Extension">
@@ -134,4 +152,5 @@ function Extension() {
       </s-form>
     </s-admin-block>
   );
+  // [END build-admin-block.create-ui-three]
 }
