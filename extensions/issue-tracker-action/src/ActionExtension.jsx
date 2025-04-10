@@ -1,57 +1,149 @@
 /// <reference types="../../../shopify.d.ts" />
-import {render} from 'preact';
-import {useEffect, useState} from 'preact/hooks';
+import { render } from "preact";
+import { useCallback, useEffect, useState } from "preact/hooks";
 
 export default function extension() {
   render(<Extension />, document.body);
 }
 
 function Extension() {
-  const {i18n, close, data, extension: {target}} = shopify;
-  console.log({data});
-  const [productTitle, setProductTitle] = useState('');
-  // Use direct API calls to fetch data from Shopify.
-  // See https://shopify.dev/docs/api/admin-graphql for more information about Shopify's GraphQL API
+  const { close, data } = shopify;
+  const [issue, setIssue] = useState({ title: "", description: "" });
+  const [allIssues, setAllIssues] = useState([]);
+  const [formErrors, setFormErrors] = useState(null);
+  const { title, description } = issue;
+
   useEffect(() => {
-    (async function getProductInfo() {
-      const getProductQuery = {
-        query: `query Product($id: ID!) {
-          product(id: $id) {
-            title
-          }
-        }`,
-        variables: {id: data.selected[0].id},
-      };
+    getIssues(data.selected[0].id).then((issues) => setAllIssues(issues || []));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-      const res = await fetch("shopify:admin/api/graphql.json", {
-        method: "POST",
-        body: JSON.stringify(getProductQuery),
-      });
+  const onSubmit = useCallback(async () => {
+    const { isValid, errors } = validateForm(issue);
+    setFormErrors(errors);
 
-      if (!res.ok) {
-        console.error('Network error');
-      }
+    if (isValid) {
+      // Commit changes to the database
+      await updateIssues(data.selected[0].id, [
+        ...allIssues,
+        {
+          id: generateId(allIssues),
+          completed: false,
+          ...issue,
+        },
+      ]);
+      // Close the modal using the 'close' API
+      close();
+    }
+  }, [issue, data.selected, allIssues, close]);
 
-      const productData = await res.json();
-      setProductTitle(productData.data.product.title);
-    })();
-  }, [data.selected]);
+  console.log({ issue, allIssues });
+
   return (
-    // The AdminAction component provides an API for setting the title and actions of the Action extension wrapper.
-    <s-admin-action>
-      <s-stack direction="block">
-        {/* Set the translation values for each supported language in the locales directory */}
-        <s-text type="strong">{i18n.translate('welcome', {target})}</s-text>
-        <s-text>Current product: {productTitle}</s-text>
-        <s-button slot="primaryAction" onClick={() => {
-            console.log('saving');
-            close();
-          }}>Done</s-button>
-        <s-button slot="secondaryAction" onClick={() => {
-            console.log('closing');
-            close();
-          }}>Close</s-button>
-      </s-stack>
+    <s-admin-action title="Create an issue">
+      <s-button slot="primaryAction" onClick={onSubmit}>
+        Create
+      </s-button>
+      <s-button slot="secondaryActions" onClick={close}>
+        Cancel
+      </s-button>
+      <s-text-field
+        value={title}
+        error={formErrors?.title ? "Please enter a title" : undefined}
+        onChange={(event) => setIssue((prev) => ({ ...prev, title: event.target.value }))}
+        label="Title"
+        maxLength={50}
+      />
+      <s-box padding-block-start="large">
+        <s-text-area
+          value={description}
+          error={formErrors?.description ? "Please enter a description" : undefined}
+          onChange={(event) => setIssue((prev) => ({ ...prev, description: event.target.value }))}
+          label="Description"
+          max-length={300}
+        />
+      </s-box>
     </s-admin-action>
   );
+}
+
+export async function updateIssues(id, newIssues) {
+  // This example uses metafields to store the data. For more information, refer to https://shopify.dev/docs/apps/custom-data/metafields.
+  return await makeGraphQLQuery(
+    `mutation SetMetafield($namespace: String!, $ownerId: ID!, $key: String!, $type: String!, $value: String!) {
+    metafieldDefinitionCreate(
+      definition: {namespace: $namespace, key: $key, name: "Tracked Issues", ownerType: PRODUCT, type: $type, access: {admin: MERCHANT_READ_WRITE}}
+    ) {
+      createdDefinition {
+        id
+      }
+    }
+    metafieldsSet(metafields: [{ownerId:$ownerId, namespace:$namespace, key:$key, type:$type, value:$value}]) {
+      userErrors {
+        field
+        message
+        code
+      }
+    }
+  }
+  `,
+    {
+      ownerId: id,
+      namespace: "$app:issues",
+      key: "issues",
+      type: "json",
+      value: JSON.stringify(newIssues),
+    },
+  );
+}
+
+export async function getIssues(productId) {
+  // This example uses metafields to store the data. For more information, refer to https://shopify.dev/docs/apps/custom-data/metafields.
+  const res = await makeGraphQLQuery(
+    `query Product($id: ID!) {
+      product(id: $id) {
+        metafield(namespace: "$app:issues", key:"issues") {
+          value
+        }
+      }
+    }
+  `,
+    { id: productId },
+  );
+
+  if (res?.data?.product?.metafield?.value) {
+    return JSON.parse(res.data.product.metafield.value);
+  }
+}
+
+async function makeGraphQLQuery(query, variables) {
+  const graphQLQuery = {
+    query,
+    variables,
+  };
+
+  const res = await fetch("shopify:admin/api/graphql.json", {
+    method: "POST",
+    body: JSON.stringify(graphQLQuery),
+  });
+
+  if (!res.ok) {
+    console.error("Network error");
+  }
+
+  return await res.json();
+}
+
+function generateId(allIssues) {
+  return !allIssues?.length ? 0 : allIssues[allIssues.length - 1].id + 1;
+}
+
+function validateForm({ title, description }) {
+  return {
+    isValid: Boolean(title) && Boolean(description),
+    errors: {
+      title: !title,
+      description: !description,
+    },
+  };
 }
