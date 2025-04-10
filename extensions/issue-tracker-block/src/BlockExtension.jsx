@@ -28,8 +28,12 @@ function Extension() {
 
       setLoading(false);
       if (productData?.data?.product?.metafield?.value) {
-        const parsedIssues = JSON.parse(productData.data.product.metafield.value);
-        setInitialValues(parsedIssues.map(({ completed }) => Boolean(completed)));
+        const parsedIssues = JSON.parse(
+          productData.data.product.metafield.value,
+        );
+        setInitialValues(
+          parsedIssues.map(({ completed }) => Boolean(completed)),
+        );
         setIssues(parsedIssues);
       }
     })();
@@ -42,7 +46,10 @@ function Extension() {
     }
 
     // Slice the array after the last item of the previous page
-    return [...issues].slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
+    return [...issues].slice(
+      (currentPage - 1) * PAGE_SIZE,
+      currentPage * PAGE_SIZE,
+    );
   }, [issuesCount, issues, currentPage]);
 
   const handleChange = async (id, value) => {
@@ -51,7 +58,9 @@ function Extension() {
       // Create a copy of the array so that you don't mistakenly mutate the state
       const newIssues = [...currentIssues];
       // Find the index of the issue that you're interested in
-      const editingIssueIndex = newIssues.findIndex((listIssue) => listIssue.id == id);
+      const editingIssueIndex = newIssues.findIndex(
+        (listIssue) => listIssue.id == id,
+      );
       // Overwrite that item with the new value
       newIssues[editingIssueIndex] = {
         // Spread the previous item to retain the values that you're not changing
@@ -84,7 +93,7 @@ function Extension() {
       <s-form id={`issues-form`} onSubmit={onSubmit} onReset={onReset}>
         <s-table paginate>
           <s-table-header-row>
-            <s-table-header>Issue</s-table-header>
+            <s-table-header listSlot="primary">Issue</s-table-header>
             <s-table-header>Status</s-table-header>
             <s-table-header></s-table-header>
           </s-table-header-row>
@@ -99,13 +108,21 @@ function Extension() {
                     </s-stack>
                   </s-table-cell>
                   <s-table-cell>
-                    <s-select>
+                    <s-select
+                      labelAccessibilityVisibility="exclusive"
+                      label="Status"
+                    >
                       <s-option value="todo">Todo</s-option>
                       <s-option value="completed">Completed</s-option>
                     </s-select>
                   </s-table-cell>
                   <s-table-cell>
-                    <s-button variant="tertiary" icon="delete" onClick={() => handleDelete(id)} />
+                    <s-button
+                      variant="tertiary"
+                      icon="delete"
+                      accessibilityLabel="Delete issue"
+                      onClick={() => handleDelete(id)}
+                    />
                   </s-table-cell>
                 </s-table-row>
               );
