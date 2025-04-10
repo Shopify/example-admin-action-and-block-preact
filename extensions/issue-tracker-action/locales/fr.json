@@ -1,0 +1,4 @@
+{
+  "name": "issue-tracker-action",
+  "welcome": "Bienvenue dans l'extension {{target}}!"
+}
