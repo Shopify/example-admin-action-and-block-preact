@@ -5,6 +5,8 @@
   "select-label": "Status",
   "option-todo": "Todo",
   "option-completed": "Completed",
-  "delete-button-label": "Delete issue",
-  "collapsed-summary": "Not enough product variants"
+  "delete-issue-button": "Delete issue",
+  "add-issue-button": "Add issue",
+  "collapsed-summary": "Not enough product variants",
+  "no-issues-text": "No issues for this product"
 }
