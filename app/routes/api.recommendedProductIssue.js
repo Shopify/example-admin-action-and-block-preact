@@ -18,8 +18,8 @@ export const loader = async ({ request }) => {
   // Get the product Id from the request
   const url = new URL(request.url);
   const productId = url.searchParams.get("productId");
-  var splitStr = productId.split("/");
-  var idNumber = parseInt(splitStr[splitStr.length - 1], 10);
+  const splitStr = productId.split("/");
+  const idNumber = parseInt(splitStr[splitStr.length - 1], 10);
 
   // Our proprietary machine learning algorithm automatically determines the best product issue :).
   const issue = productIssues[idNumber % productIssues.length];
