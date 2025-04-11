@@ -22,7 +22,7 @@ function validateForm({ title, description }) {
 }
 
 function Extension() {
-  const { close, data, intents } = shopify;
+  const { close, data, intents, i18n } = shopify;
   const issueId = intents?.launchUrl
     ? new URL(intents?.launchUrl)?.searchParams?.get("issueId")
     : null;
@@ -122,13 +122,21 @@ function Extension() {
   }
 
   return (
-    <s-admin-action title={isEditing ? "Edit your issue" : "Create an issue"}>
+    <s-admin-action
+      title={
+        isEditing
+          ? i18n.translate("edit-issue-heading")
+          : i18n.translate("create-issue-heading")
+      }
+    >
       <s-button slot="primaryAction" onClick={onSubmit}>
-        {isEditing ? "Save" : "Create"}
+        {isEditing
+          ? i18n.translate("save-button")
+          : i18n.translate("create-button")}
       </s-button>
 
       <s-button slot="secondaryActions" onClick={close}>
-        Cancel
+        {i18n.translate("cancel-button")}
       </s-button>
 
       {/*Create a banner to let the buyer auto fill the issue with the
@@ -137,15 +145,13 @@ function Extension() {
       <s-stack direction="block">
         <s-banner>
           <s-stack direction="block">
-            <s-text>
-              Automatically fill the issue based on past customer feedback
-            </s-text>
+            <s-text>{i18n.translate("issue-generate-banner-text")}</s-text>
             <s-stack direction="inline">
               <s-button
                 disabled={loadingRecommended}
                 onClick={getIssueRecommendation}
               >
-                Generate issue
+                {i18n.translate("issue-generate-button")}
               </s-button>
               {loadingRecommended && <s-spinner />}
             </s-stack>
@@ -155,23 +161,27 @@ function Extension() {
 
       <s-text-field
         value={title}
-        error={formErrors?.title ? "Please enter a title" : undefined}
+        error={
+          formErrors?.title ? i18n.translate("issue-title-error") : undefined
+        }
         onChange={(event) =>
           setIssue((prev) => ({ ...prev, title: event.target.value }))
         }
-        label="Title"
+        label={i18n.translate("issue-title-label")}
         maxLength={50}
       />
       <s-box padding-block-start="large">
         <s-text-area
           value={description}
           error={
-            formErrors?.description ? "Please enter a description" : undefined
+            formErrors?.description
+              ? i18n.translate("issue-description-error")
+              : undefined
           }
           onChange={(event) =>
             setIssue((prev) => ({ ...prev, description: event.target.value }))
           }
-          label="Description"
+          label={i18n.translate("issue-description-label")}
           max-length={300}
         />
       </s-box>

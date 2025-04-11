@@ -24,7 +24,7 @@ function validateForm({ title, description }) {
 
 function Extension() {
   // [START connect-action-block.intent-one]
-  const { close, data, intents } = shopify;
+  const { close, data, intents, i18n } = shopify;
   const issueId = intents?.launchUrl
     ? new URL(intents?.launchUrl)?.searchParams?.get("issueId")
     : null;
@@ -37,14 +37,11 @@ function Extension() {
     id: issueId,
   });
 
-  const [initialValues, setInitialValues] = useState([]);
-  const [issues, setIssues] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
   const [allIssues, setAllIssues] = useState([]);
 
   const [formErrors, setFormErrors] = useState(null);
-  const { title, description, id } = issue;
-  const isEditing = Boolean(id);
+  const { title, description } = issue;
+  const isEditing = Boolean(issueId);
 
   useEffect(() => {
     getIssues(data.selected[0].id).then((issues) => {
@@ -107,32 +104,44 @@ function Extension() {
   }
 
   return (
-    <s-admin-action title={isEditing ? "Edit your issue" : "Create an issue"}>
+    <s-admin-action
+      heading={
+        isEditing
+          ? i18n.translate("edit-issue-heading")
+          : i18n.translate("create-issue-heading")
+      }
+    >
       <s-button slot="primaryAction" onClick={onSubmit}>
-        {isEditing ? "Save" : "Create"}
+        {isEditing
+          ? i18n.translate("save-button")
+          : i18n.translate("create-button")}
       </s-button>
       <s-button slot="secondaryActions" onClick={close}>
-        Cancel
+        {i18n.translate("cancel-button")}
       </s-button>
       <s-text-field
         value={title}
-        error={formErrors?.title ? "Please enter a title" : undefined}
+        error={
+          formErrors?.title ? i18n.translate("issue-title-error") : undefined
+        }
         onChange={(event) =>
           setIssue((prev) => ({ ...prev, title: event.target.value }))
         }
-        label="Title"
+        label={i18n.translate("issue-title-label")}
         maxLength={50}
       />
       <s-box padding-block-start="large">
         <s-text-area
           value={description}
           error={
-            formErrors?.description ? "Please enter a description" : undefined
+            formErrors?.description
+              ? i18n.translate("issue-description-error")
+              : undefined
           }
           onChange={(event) =>
             setIssue((prev) => ({ ...prev, description: event.target.value }))
           }
-          label="Description"
+          label={i18n.translate("issue-description-label")}
           max-length={300}
         />
       </s-box>

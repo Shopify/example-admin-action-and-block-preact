@@ -26,7 +26,7 @@ function validateForm({ title, description }) {
 }
 
 function Extension() {
-  const { close, data } = shopify;
+  const { close, data, i18n } = shopify;
   const [issue, setIssue] = useState({ title: "", description: "" });
   const [allIssues, setAllIssues] = useState([]);
   const [formErrors, setFormErrors] = useState(null);
@@ -62,32 +62,36 @@ function Extension() {
 
   // [START build-admin-action.create-ui-three]
   return (
-    <s-admin-action title="Create an issue">
+    <s-admin-action heading={i18n.translate("name")}>
       <s-button slot="primaryAction" onClick={onSubmit}>
-        Create
+        {i18n.translate("issue-create-button")}
       </s-button>
       <s-button slot="secondaryActions" onClick={close}>
-        Cancel
+        {i18n.translate("issue-cancel-button")}
       </s-button>
       <s-text-field
         value={title}
-        error={formErrors?.title ? "Please enter a title" : undefined}
+        error={
+          formErrors?.title ? i18n.translate("issue-title-error") : undefined
+        }
         onChange={(event) =>
           setIssue((prev) => ({ ...prev, title: event.target.value }))
         }
-        label="Title"
+        label={i18n.translate("issue-title-label")}
         maxLength={50}
       />
       <s-box padding-block-start="large">
         <s-text-area
           value={description}
           error={
-            formErrors?.description ? "Please enter a description" : undefined
+            formErrors?.description
+              ? i18n.translate("issue-description-error")
+              : undefined
           }
           onChange={(event) =>
             setIssue((prev) => ({ ...prev, description: event.target.value }))
           }
-          label="Description"
+          label={i18n.translate("issue-description-label")}
           max-length={300}
         />
       </s-box>
