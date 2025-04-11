@@ -1,10 +1,12 @@
 /// <reference types="../../../../shopify.d.ts" />
 export default async function extension() {
-  const {data} = shopify;
+  const { data } = shopify;
   const variantCount = await getVariantsCount(data.selected[0].id);
 
-  return {display: variantCount > 1 }
-};// Use direct API calls to fetch data from Shopify.
+  return { display: variantCount > 1 };
+}
+
+// Use direct API calls to fetch data from Shopify.
 // See https://shopify.dev/docs/api/admin-graphql for more information about Shopify's GraphQL API
 async function getVariantsCount(id) {
   const getProductQuery = {
