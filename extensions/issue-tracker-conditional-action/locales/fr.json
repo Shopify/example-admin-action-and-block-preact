@@ -1,4 +1,15 @@
 {
-  "name": "issue-tracker-conditional-action",
-  "welcome": "Bienvenue dans l'extension {{target}}!"
+  "name": "Créer un problème",
+  "create-issue-heading": "Créer un problème",
+  "edit-issue-heading": "Modifier votre problème",
+  "issue-description-label": "Description",
+  "issue-description-error": "Veuillez entrer une description",
+  "issue-title-label": "Titre",
+  "issue-title-error": "Veuillez entrer un titre",
+  "issue-create-button": "Create",
+  "issue-cancel-button": "Annuler",
+  "issue-save-button": "Enregistrer",
+  "issue-edit-button": "Modifier",
+  "issue-generate-button": "Générer un problème",
+  "issue-generate-banner-text": "Remplir automatiquement le problème en fonction des retours clients passés"
 }

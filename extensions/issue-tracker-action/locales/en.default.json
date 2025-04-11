@@ -1,4 +1,15 @@
 {
-  "name": "issue-tracker-action",
-  "welcome": "Welcome to the {{target}} extension!"
+  "name": "Create an issue",
+  "create-issue-heading": "Create an issue",
+  "edit-issue-heading": "Edit your issue",
+  "issue-description-label": "Description",
+  "issue-description-error": "Please enter a description",
+  "issue-title-label": "Title",
+  "issue-title-error": "Please enter a title",
+  "issue-create-button": "Create",
+  "issue-cancel-button": "Cancel",
+  "issue-save-button": "Save",
+  "issue-edit-button": "Edit",
+  "issue-generate-button": "Generate issue",
+  "issue-generate-banner-text": "Automatically fill the issue based on past customer feedback"
 }
