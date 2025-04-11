@@ -6,5 +6,6 @@
   "select-label": "Statut",
   "option-todo": "À faire",
   "option-completed": "Terminé",
-  "delete-button-label": "Supprimer le problème"
+  "delete-button-label": "Supprimer le problème",
+  "collapsed-summary": "Pas assez de variantes de produit"
 }
