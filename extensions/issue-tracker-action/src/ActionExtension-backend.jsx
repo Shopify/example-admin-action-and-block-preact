@@ -43,7 +43,6 @@ function Extension() {
 
   const { title, description } = issue;
 
-  // [START build-admin-action.connect-api-one]
   useEffect(() => {
     getIssues(data.selected[0].id).then((issues) => {
       setLoadingInfo(false);
@@ -51,8 +50,8 @@ function Extension() {
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  // [END build-admin-action.connect-api-one]
 
+  // [START connect-backend.call-backend]
   const getIssueRecommendation = useCallback(async () => {
     // Get a recommended issue title and description from your app's backend
     setLoadingRecommended(true);
@@ -72,8 +71,8 @@ function Extension() {
       setIssue(json?.productIssue);
     }
   }, [data.selected]);
+  // [END connect-backend.call-backend]
 
-  // [START build-admin-action.connect-api-two]
   const onSubmit = useCallback(async () => {
     const { isValid, errors } = validateForm(issue);
     setFormErrors(errors);
