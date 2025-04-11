@@ -103,7 +103,7 @@ function Extension() {
   ) : (
     <>
       <s-form id={`issues-form`} onSubmit={onSubmit} onReset={onReset}>
-        {issues.length > 0 ? (
+        {paginatedIssues.length > 0 ? (
           <s-table
             paginate
             onNextPage={() => setCurrentPage(currentPage + 1)}
