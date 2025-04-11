@@ -1,56 +1,91 @@
 /// <reference types="../../../shopify.d.ts" />
-import {render} from 'preact';
-import {useEffect, useState} from 'preact/hooks';
+import { render } from "preact";
+import { useCallback, useEffect, useState } from "preact/hooks";
+import { getIssues, updateIssues } from "./utils";
 
 export default function extension() {
   render(<Extension />, document.body);
 }
 
+function generateId(allIssues) {
+  return !allIssues?.length ? 0 : allIssues[allIssues.length - 1].id + 1;
+}
+
+function validateForm({ title, description }) {
+  return {
+    isValid: Boolean(title) && Boolean(description),
+    errors: {
+      title: !title,
+      description: !description,
+    },
+  };
+}
+
 function Extension() {
-  const {i18n, close, data, extension: {target}} = shopify;
-  console.log({data});
-  const [productTitle, setProductTitle] = useState('');
-  // Use direct API calls to fetch data from Shopify.
-  // See https://shopify.dev/docs/api/admin-graphql for more information about Shopify's GraphQL API
+  const { close, data, i18n } = shopify;
+  const [issue, setIssue] = useState({ title: "", description: "" });
+  const [allIssues, setAllIssues] = useState([]);
+  const [formErrors, setFormErrors] = useState(null);
+  const { title, description } = issue;
+
   useEffect(() => {
-    (async function getProductInfo() {
-      const getProductQuery = {
-        query: `query Product($id: ID!) {
-          product(id: $id) {
-            title
-          }
-        }`,
-        variables: {id: data.selected[0].id},
-      };
-      const res = await fetch("shopify:admin/api/graphql.json", {
-        method: "POST",
-        body: JSON.stringify(getProductQuery),
-      });
+    getIssues(data.selected[0].id).then((issues) => setAllIssues(issues || []));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-      if (!res.ok) {
-        console.error('Network error');
-      }
+  const onSubmit = useCallback(async () => {
+    const { isValid, errors } = validateForm(issue);
+    setFormErrors(errors);
 
-      const productData = await res.json();
-      setProductTitle(productData.data.product.title);
-    })();
-  }, [data.selected]);
+    if (isValid) {
+      // Commit changes to the database
+      await updateIssues(data.selected[0].id, [
+        ...allIssues,
+        {
+          id: generateId(allIssues),
+          completed: false,
+          ...issue,
+        },
+      ]);
+      // Close the modal using the 'close' API
+      close();
+    }
+  }, [issue, data.selected, allIssues, close]);
+
   return (
-    // The AdminAction component provides an API for setting the title and actions of the Action extension wrapper.
-    <s-admin-action>
-      <s-stack direction="block">
-        {/* Set the translation values for each supported language in the locales directory */}
-        <s-text type="strong">{i18n.translate('welcome', {target})}</s-text>
-        <s-text>Current product: {productTitle}</s-text>
-      </s-stack>
-      <s-button slot="primaryAction" onClick={() => {
-          console.log('saving');
-          close();
-        }}>Done</s-button>
-      <s-button slot="secondaryAction" onClick={() => {
-          console.log('closing');
-          close();
-      }}>Close</s-button>
+    <s-admin-action heading={i18n.translate("create-issue-heading")}>
+      <s-button slot="primaryAction" onClick={onSubmit}>
+        {i18n.translate("issue-create-button")}
+      </s-button>
+      <s-button slot="secondaryActions" onClick={close}>
+        {i18n.translate("issue-cancel-button")}
+      </s-button>
+      <s-text-field
+        value={title}
+        error={
+          formErrors?.title ? i18n.translate("issue-title-error") : undefined
+        }
+        onChange={(event) =>
+          setIssue((prev) => ({ ...prev, title: event.target.value }))
+        }
+        label={i18n.translate("issue-title-label")}
+        maxLength={50}
+      />
+      <s-box padding-block-start="large">
+        <s-text-area
+          value={description}
+          error={
+            formErrors?.description
+              ? i18n.translate("issue-description-error")
+              : undefined
+          }
+          onChange={(event) =>
+            setIssue((prev) => ({ ...prev, description: event.target.value }))
+          }
+          label={i18n.translate("issue-description-label")}
+          max-length={300}
+        />
+      </s-box>
     </s-admin-action>
   );
 }
