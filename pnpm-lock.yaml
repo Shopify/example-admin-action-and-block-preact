@@ -123,6 +123,24 @@ importers:
         specifier: ^10.10.x
         version: 10.26.5
 
+  extensions/issue-tracker-conditional-action:
+    dependencies:
+      '@shopify/ui-extensions':
+        specifier: 2025-07-rc
+        version: 0.0.0-2025-07-rc-20250410171803(preact@10.26.5)
+      preact:
+        specifier: ^10.10.x
+        version: 10.26.5
+
+  extensions/issue-tracker-conditional-block:
+    dependencies:
+      '@shopify/ui-extensions':
+        specifier: 2025-07-rc
+        version: 0.0.0-2025-07-rc-20250410171803(preact@10.26.5)
+      preact:
+        specifier: ^10.10.x
+        version: 10.26.5
+
 packages:
 
   '@ampproject/remapping@2.3.0':

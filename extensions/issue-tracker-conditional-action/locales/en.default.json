@@ -1,0 +1,4 @@
+{
+  "name": "issue-tracker-conditional-action",
+  "welcome": "Welcome to the {{target}} extension!"
+}

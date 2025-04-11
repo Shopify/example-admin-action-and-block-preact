@@ -1,0 +1,4 @@
+{
+  "name": "issue-tracker-conditional-block",
+  "welcome": "Welcome to the {{target}} extension!"
+}
