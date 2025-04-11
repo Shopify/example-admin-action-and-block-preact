@@ -96,6 +96,15 @@ importers:
         specifier: ^6.2.2
         version: 6.2.6(@types/node@22.14.0)(jiti@2.4.2)(yaml@2.7.1)
 
+  extensions/admin-print:
+    dependencies:
+      '@shopify/ui-extensions':
+        specifier: 2025-07-rc
+        version: 0.0.0-2025-07-rc-20250410171803(preact@10.26.5)
+      preact:
+        specifier: ^10.10.x
+        version: 10.26.5
+
   extensions/issue-tracker-action:
     dependencies:
       '@shopify/ui-extensions':
@@ -1531,6 +1540,9 @@ packages:
 
   '@shopify/ui-extensions@0.0.0-2025-07-rc-20250410041844':
     resolution: {integrity: sha512-GrOZHZfid6iFdfsUQBnr2BQryXzBHx5VkNGqrxT5syUZDduIsWNU5dX08O4J4G83FSKT9l/TBSJpTOanLprIYg==}
+
+  '@shopify/ui-extensions@0.0.0-2025-07-rc-20250410171803':
+    resolution: {integrity: sha512-IxZGaKC6dpid2eto94O8uHxIWyTvRwHqNbOMsnvDVuoTkKwQnTn/T1wEfAlUwONkUdN/FQVA2OvhtYTbipm52A==}
 
   '@testing-library/dom@8.20.1':
     resolution: {integrity: sha512-/DiOQ5xBxgdYRC8LNk7U+RWat0S3qRLeIw3ZIkMQ9kkVlRmwD/Eg8k8CqIpD6GW7u20JIUOfMKbxtiLutpjQ4g==}
@@ -6703,6 +6715,14 @@ snapshots:
       '@shopify/graphql-client': 1.3.2
 
   '@shopify/ui-extensions@0.0.0-2025-07-rc-20250410041844(preact@10.26.5)':
+    dependencies:
+      ts-morph: 25.0.1
+    optionalDependencies:
+      '@preact/signals': 2.0.3(preact@10.26.5)
+    transitivePeerDependencies:
+      - preact
+
+  '@shopify/ui-extensions@0.0.0-2025-07-rc-20250410171803(preact@10.26.5)':
     dependencies:
       ts-morph: 25.0.1
     optionalDependencies:

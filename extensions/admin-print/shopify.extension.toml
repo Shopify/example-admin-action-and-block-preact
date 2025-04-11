@@ -1,0 +1,18 @@
+api_version = "2025-07"
+[[extensions]]
+name = "admin-print"
+handle = "admin-print"
+type = "ui_extension"
+
+
+# Only 1 target can be specified for each admin print action extension
+[[extensions.targeting]]
+module = "./src/PrintActionExtension.jsx"
+target = "admin.order-details.print-action.render"
+
+# Valid extension targets:
+
+# - admin.order-details.print-action.render
+# - admin.order-index.selection-print-action.render
+# - admin.product-details.print-action.render
+# - admin.product-index.selection-print-action.render
