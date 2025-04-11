@@ -64,6 +64,8 @@ async function makeGraphQLQuery(query, variables) {
 
   return await res.json();
 }
+
+// [START conditional-action-extension.utils]
 export async function getProductVariants(data) {
   const getProductQuery = {
     query: `query Product($id: ID!) {
@@ -93,3 +95,4 @@ export async function getProductVariants(data) {
   const productData = await res.json();
   return productData.data.product.variants.edges;
 }
+// [END conditional-action-extension.utils]
