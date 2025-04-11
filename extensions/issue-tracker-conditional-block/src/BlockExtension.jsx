@@ -21,6 +21,8 @@ function Extension() {
   const [loading, setLoading] = useState(true);
   const [initialValues, setInitialValues] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+
+  // [START conditional-block-extension.has-variants]
   const [shouldRender, setShouldRender] = useState(false);
 
   useEffect(() => {
@@ -32,6 +34,8 @@ function Extension() {
       if (productData?.data?.product?.variants?.edges.length > 1) {
         setShouldRender(true);
       }
+      // [END conditional-block-extension.has-variants]
+
       if (productData?.data?.product?.metafield?.value) {
         const parsedIssues = JSON.parse(
           productData.data.product.metafield.value,
@@ -174,6 +178,8 @@ function Extension() {
     </>
   );
 
+  // [START conditional-block-extension.conditional-markup]
+  // Only render the block body if there is more than one variant, otherwise, return null to collapse the block
   return (
     <s-admin-block
       title={i18n.translate("name")}
@@ -182,4 +188,5 @@ function Extension() {
       {shouldRender ? blockMarkup : null}
     </s-admin-block>
   );
+  // [END conditional-block-extension.conditional-markup]
 }
