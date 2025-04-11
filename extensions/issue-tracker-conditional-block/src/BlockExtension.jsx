@@ -19,7 +19,7 @@ function Extension() {
   const totalPages = issuesCount / PAGE_SIZE;
 
   const [loading, setLoading] = useState(true);
-  const [initialValues, setInitialValues] = useState([]);
+  const [_, setInitialValues] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
 
   // [START conditional-block-extension.has-variants]
@@ -102,7 +102,6 @@ function Extension() {
     <s-spinner></s-spinner>
   ) : (
     <>
-      <s-text>Issues</s-text>
       <s-form id={`issues-form`} onSubmit={onSubmit} onReset={onReset}>
         {issues.length > 0 ? (
           <s-table
@@ -113,8 +112,12 @@ function Extension() {
             hasPreviousPage={currentPage > 1}
           >
             <s-table-header-row>
-              <s-table-header listSlot="primary">Issue</s-table-header>
-              <s-table-header>Status</s-table-header>
+              <s-table-header listSlot="primary">
+                {i18n.translate("issue-column-heading")}
+              </s-table-header>
+              <s-table-header>
+                {i18n.translate("status-column-heading")}
+              </s-table-header>
               <s-table-header></s-table-header>
             </s-table-header-row>
             <s-table-body>
@@ -131,19 +134,25 @@ function Extension() {
                       <s-table-cell>
                         <s-select
                           labelAccessibilityVisibility="exclusive"
-                          label="Status"
+                          label={i18n.translate("select-label")}
                           value={completed ? "completed" : "todo"}
                           onChange={(e) => handleChange(id, e.target.value)}
                         >
-                          <s-option value="todo">Todo</s-option>
-                          <s-option value="completed">Completed</s-option>
+                          <s-option value="todo">
+                            {i18n.translate("option-todo")}
+                          </s-option>
+                          <s-option value="completed">
+                            {i18n.translate("option-completed")}
+                          </s-option>
                         </s-select>
                       </s-table-cell>
                       <s-table-cell>
                         <s-button
                           variant="tertiary"
                           icon="delete"
-                          accessibilityLabel="Delete issue"
+                          accessibilityLabel={i18n.translate(
+                            "delete-issue-button",
+                          )}
                           onClick={() => handleDelete(id)}
                         />
                       </s-table-cell>
@@ -158,11 +167,11 @@ function Extension() {
                 navigation?.navigate(url);
               }}
             >
-              Add issue
+              {i18n.translate("add-issue-button")}
             </s-button>
           </s-table>
         ) : (
-          <s-text>No issues for this product</s-text>
+          <s-text>{i18n.translate("no-issues-text")}</s-text>
         )}
         <s-box>
           <s-button
@@ -171,7 +180,7 @@ function Extension() {
               navigation?.navigate(url);
             }}
           >
-            Add issue
+            {i18n.translate("add-issue-button")}
           </s-button>
         </s-box>
       </s-form>
@@ -183,7 +192,9 @@ function Extension() {
   return (
     <s-admin-block
       title={i18n.translate("name")}
-      collapsedSummary={!shouldRender ? "Not enough product variants" : null}
+      collapsedSummary={
+        !shouldRender ? i18n.translate("collapsed-summary") : null
+      }
     >
       {shouldRender ? blockMarkup : null}
     </s-admin-block>

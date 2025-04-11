@@ -17,10 +17,10 @@ export default function extension() {
 const PAGE_SIZE = 3;
 
 function Extension() {
-  const { data } = shopify;
+  const { data, i18n } = shopify;
 
   const [loading, setLoading] = useState(true);
-  const [initialValues, setInitialValues] = useState([]);
+  const [_, setInitialValues] = useState([]);
   const [issues, setIssues] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -109,44 +109,63 @@ function Extension() {
   }
 
   return (
-    <s-admin-block title="My Block Extension">
+    <s-admin-block heading={i18n.translate("name")}>
       <s-form id={`issues-form`} onSubmit={onSubmit} onReset={onReset}>
-        <s-table paginate>
+        <s-table
+          paginate
+          id="issues-table"
+          onNextPage={() => setCurrentPage(currentPage + 1)}
+          onPreviousPage={() => setCurrentPage(currentPage - 1)}
+          hasNextPage={currentPage < totalPages}
+          hasPreviousPage={currentPage > 1}
+        >
           <s-table-header-row>
-            <s-table-header listSlot="primary">Issue</s-table-header>
-            <s-table-header>Status</s-table-header>
+            <s-table-header listSlot="primary">
+              {i18n.translate("issue-column-heading")}
+            </s-table-header>
+            <s-table-header>
+              {i18n.translate("status-column-heading")}
+            </s-table-header>
             <s-table-header></s-table-header>
           </s-table-header-row>
           <s-table-body>
-            {issues.map(({ id, title, description, completed }, index) => {
-              return (
-                <s-table-row key={id}>
-                  <s-table-cell>
-                    <s-stack direction="block">
-                      <s-text>{title}</s-text>
-                      <s-text>{description}</s-text>
-                    </s-stack>
-                  </s-table-cell>
-                  <s-table-cell>
-                    <s-select
-                      labelAccessibilityVisibility="exclusive"
-                      label="Status"
-                    >
-                      <s-option value="todo">Todo</s-option>
-                      <s-option value="completed">Completed</s-option>
-                    </s-select>
-                  </s-table-cell>
-                  <s-table-cell>
-                    <s-button
-                      variant="tertiary"
-                      icon="delete"
-                      accessibilityLabel="Delete issue"
-                      onClick={() => handleDelete(id)}
-                    />
-                  </s-table-cell>
-                </s-table-row>
-              );
-            })}
+            {paginatedIssues.map(
+              ({ id, title, description, completed }, index) => {
+                return (
+                  <s-table-row key={id}>
+                    <s-table-cell>
+                      <s-stack direction="block">
+                        <s-text>{title}</s-text>
+                        <s-text>{description}</s-text>
+                      </s-stack>
+                    </s-table-cell>
+                    <s-table-cell>
+                      <s-select
+                        labelAccessibilityVisibility="exclusive"
+                        label={i18n.translate("select-label")}
+                      >
+                        <s-option value="todo">
+                          {i18n.translate("option-todo")}
+                        </s-option>
+                        <s-option value="completed">
+                          {i18n.translate("option-completed")}
+                        </s-option>
+                      </s-select>
+                    </s-table-cell>
+                    <s-table-cell>
+                      <s-button
+                        variant="tertiary"
+                        icon="delete"
+                        accessibilityLabel={i18n.translate(
+                          "delete-issue-button",
+                        )}
+                        onClick={() => handleDelete(id)}
+                      />
+                    </s-table-cell>
+                  </s-table-row>
+                );
+              },
+            )}
           </s-table-body>
         </s-table>
       </s-form>
