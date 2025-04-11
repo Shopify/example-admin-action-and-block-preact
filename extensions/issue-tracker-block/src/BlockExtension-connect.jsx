@@ -1,30 +1,25 @@
 /// <reference types="../../../shopify.d.ts" />
 
-// [START build-admin-block.create-ui-one]
 import { render } from "preact";
 import { useEffect, useMemo, useState } from "preact/hooks";
-// [END build-admin-block.create-ui-one]
 
-// [START build-admin-block.connect-api-one]
 import { updateIssues, getIssues } from "./utils";
-// [END build-admin-block.connect-api-one]
 
-// [START build-admin-block.create-ui-two]
 export default function extension() {
   render(<Extension />, document.body);
 }
-// [END build-admin-block.create-ui-two]
 const PAGE_SIZE = 3;
 
 function Extension() {
+  // [START connect-block-action.nav-api]
   const { data, navigation } = shopify;
+  // [END connect-block-action.nav-api]
 
   const [loading, setLoading] = useState(true);
   const [initialValues, setInitialValues] = useState([]);
   const [issues, setIssues] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
 
-  // [START build-admin-block.get-initial-data]
   const productId = data.selected[0].id;
   const issuesCount = issues.length;
   const totalPages = issuesCount / PAGE_SIZE;
@@ -59,9 +54,7 @@ function Extension() {
       currentPage * PAGE_SIZE,
     );
   }, [issuesCount, issues, currentPage]);
-  // [END build-admin-block.get-initial-data]
 
-  // [START build-admin-block.add-change-and-delete-handlers]
   const handleChange = async (id, value) => {
     // Update the local state of the extension to reflect changes
     setIssues((currentIssues) => {
@@ -90,7 +83,6 @@ function Extension() {
     // Commit changes to the database
     await updateIssues(productId, newIssues);
   };
-  // [END build-admin-block.add-change-and-delete-handlers]
 
   const onSubmit = (event) => {
     // Commit changes to the database
@@ -99,7 +91,6 @@ function Extension() {
 
   const onReset = () => {};
 
-  // [START build-admin-block.create-ui-three]
   if (loading) {
     return (
       <s-stack direction="inline">
@@ -111,78 +102,100 @@ function Extension() {
   return (
     <s-admin-block title="My Block Extension">
       <s-form id={`issues-form`} onSubmit={onSubmit} onReset={onReset}>
-        <s-table
-          paginate
-          hasNextPage={totalPages > currentPage}
-          hasPreviousPage={currentPage > 1}
-          onNextPage={() => setCurrentPage(currentPage + 1)}
-          onPreviousPage={() => setCurrentPage(currentPage - 1)}
-        >
-          <s-table-header-row>
-            <s-table-header listSlot="primary">Issue</s-table-header>
-            <s-table-header>Status</s-table-header>
-            <s-table-header></s-table-header>
-            <s-table-header></s-table-header>
-          </s-table-header-row>
-          <s-table-body>
-            {paginatedIssues.map(
-              ({ id, title, description, completed }, index) => {
-                return (
-                  <s-table-row key={id}>
-                    <s-table-cell>
-                      <s-stack direction="block">
-                        <s-text>{title}</s-text>
-                        <s-text>{description}</s-text>
-                      </s-stack>
-                    </s-table-cell>
-                    <s-table-cell>
-                      <s-select
-                        labelAccessibilityVisibility="exclusive"
-                        label="Status"
-                        defaultValue={completed ? "completed" : "todo"}
-                        onChange={(event) =>
-                          handleChange(id, event.target.value)
-                        }
-                      >
-                        <s-option value="todo">Todo</s-option>
-                        <s-option value="completed">Completed</s-option>
-                      </s-select>
-                    </s-table-cell>
-                    <s-table-cell>
-                      <s-button
-                        variant="tertiary"
-                        icon="edit"
-                        accessibilityLabel="Edit issue"
-                        onClick={() => {
-                          const url = `extension:issue-tracker-action?issueId=${id}`;
-                          navigation?.navigate(url);
-                        }}
-                      />
-                    </s-table-cell>
-                    <s-table-cell>
-                      <s-button
-                        icon="delete"
-                        accessibilityLabel="Delete issue"
-                        onClick={() => handleDelete(id)}
-                      />
-                    </s-table-cell>
-                  </s-table-row>
-                );
-              },
-            )}
-          </s-table-body>
-        </s-table>
+        {issues.length ? (
+          <>
+            <s-table
+              paginate
+              hasNextPage={totalPages > currentPage}
+              hasPreviousPage={currentPage > 1}
+              onNextPage={() => setCurrentPage(currentPage + 1)}
+              onPreviousPage={() => setCurrentPage(currentPage - 1)}
+            >
+              <s-table-header-row>
+                <s-table-header listSlot="primary">Issue</s-table-header>
+                <s-table-header>Status</s-table-header>
+                <s-table-header></s-table-header>
+                <s-table-header></s-table-header>
+              </s-table-header-row>
+              <s-table-body>
+                {paginatedIssues.map(
+                  ({ id, title, description, completed }, index) => {
+                    return (
+                      <s-table-row key={id}>
+                        <s-table-cell>
+                          <s-stack direction="block">
+                            <s-text>{title}</s-text>
+                            <s-text>{description}</s-text>
+                          </s-stack>
+                        </s-table-cell>
+                        <s-table-cell>
+                          <s-select
+                            labelAccessibilityVisibility="exclusive"
+                            label="Status"
+                            defaultValue={completed ? "completed" : "todo"}
+                            onChange={(event) =>
+                              handleChange(id, event.target.value)
+                            }
+                          >
+                            <s-option value="todo">Todo</s-option>
+                            <s-option value="completed">Completed</s-option>
+                          </s-select>
+                        </s-table-cell>
 
-        <s-button
-          onClick={() => {
-            const url = `extension:issue-tracker-action`;
-            navigation?.navigate(url);
-          }}
-        >
-          Add issue
-        </s-button>
+                        {/* [START connect-block-action.edit-button] */}
+                        <s-table-cell>
+                          <s-button
+                            variant="tertiary"
+                            icon="edit"
+                            accessibilityLabel="Edit issue"
+                            onClick={() => {
+                              const url = `extension:issue-tracker-action?issueId=${id}`;
+                              navigation?.navigate(url);
+                            }}
+                          />
+                        </s-table-cell>
+                        {/* [END connect-block-action.edit-button] */}
+
+                        <s-table-cell>
+                          <s-button
+                            icon="delete"
+                            accessibilityLabel="Delete issue"
+                            onClick={() => handleDelete(id)}
+                          />
+                        </s-table-cell>
+                      </s-table-row>
+                    );
+                  },
+                )}
+              </s-table-body>
+            </s-table>
+
+            {/* [START connect-block-action.create-issue] */}
+            <s-button
+              onClick={() => {
+                const url = `extension:issue-tracker-action`;
+                navigation?.navigate(url);
+              }}
+            >
+              Add issue
+            </s-button>
+            {/* [END connect-block-action.create-issue] */}
+          </>
+        ) : (
+          <>
+            {/* [START connect-block-action.no-issues] */}
+            <s-button
+              onClick={() => {
+                const url = `extension:issue-tracker-action`;
+                navigation?.navigate(url);
+              }}
+            >
+              Add your first issue
+            </s-button>
+            {/* [END connect-block-action.no-issues] */}
+          </>
+        )}
       </s-form>
     </s-admin-block>
   );
-  // [END build-admin-block.create-ui-three]
 }
