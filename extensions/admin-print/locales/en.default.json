@@ -2,6 +2,6 @@
   "warningTitle": "Title",
   "warningBody": "Show warning banner when form is in an invalid state.",
   "documents": "Documents",
-  "document1": "Document 1",
-  "document2": "Document 2"
+  "invoice": "Invoice",
+  "packingSlip": "Packing Slip"
 }
