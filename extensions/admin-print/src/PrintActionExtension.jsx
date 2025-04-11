@@ -1,15 +1,21 @@
 /// <reference types="../../../shopify.d.ts" />
-import { render } from "preact";
 import { useEffect, useState } from "preact/hooks";
+
+// [START build-admin-print-action.create-ui-one]
+import { render } from "preact";
+// [END build-admin-print-action.create-ui-one]
 
 const baseSrc = `https://cdn.shopify.com/static/extensibility/print-example`;
 
+// [START build-admin-print-action.create-ui-two]
 export default function extension() {
   render(<Extension />, document.body);
 }
+// [END build-admin-print-action.create-ui-two]
 
 function Extension() {
   const { i18n, data } = shopify;
+  // [START build-admin-print-action.set-src]
   const [src, setSrc] = useState(null);
 
   const [printInvoice, setPrintInvoice] = useState(true);
@@ -36,7 +42,9 @@ function Extension() {
       setSrc(null);
     }
   }, [data.selected, printInvoice, printPackingSlip]);
+  // [END build-admin-print-action.set-src]
 
+  // [START build-admin-print-action.create-ui-three]
   return (
     /*
       The s-admin-print-action component provides an API for setting the src of the Print Action extension wrapper.
@@ -71,4 +79,5 @@ function Extension() {
       </s-stack>
     </s-admin-print-action>
   );
+  // [END build-admin-print-action.create-ui-three]
 }
