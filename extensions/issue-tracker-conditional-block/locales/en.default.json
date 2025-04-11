@@ -1,4 +1,9 @@
 {
-  "name": "issue-tracker-conditional-block",
-  "welcome": "Welcome to the {{target}} extension!"
+  "name": "Product Issues",
+  "issue-column-heading": "Issue",
+  "status-column-heading": "Status",
+  "select-label": "Status",
+  "option-todo": "Todo",
+  "option-completed": "Completed",
+  "delete-button-label": "Delete issue"
 }

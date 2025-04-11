@@ -1,4 +1,10 @@
 {
-  "name": "issue-tracker-block",
-  "welcome": "Bienvenue dans l'extension {{target}}!"
+  "name": "Problèmes de produit",
+  "welcome": "Bienvenue dans l'extension {{target}}!",
+  "issue-column-heading": "Problème",
+  "status-column-heading": "Statut",
+  "select-label": "Statut",
+  "option-todo": "À faire",
+  "option-completed": "Terminé",
+  "delete-button-label": "Supprimer le problème"
 }
