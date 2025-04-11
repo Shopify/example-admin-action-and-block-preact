@@ -1,15 +1,11 @@
 /// <reference types="../../../shopify.d.ts" />
-// [START build-admin-action.create-ui-one]
 import { render } from "preact";
 import { useCallback, useEffect, useState } from "preact/hooks";
 import { getIssues, updateIssues } from "./utils";
-// [END build-admin-action.create-ui-one]
 
-// [START build-admin-action.create-ui-two]
 export default function extension() {
   render(<Extension />, document.body);
 }
-// [END build-admin-action.create-ui-two]
 
 function generateId(allIssues) {
   return !allIssues?.length ? 0 : allIssues[allIssues.length - 1].id + 1;
@@ -106,7 +102,6 @@ function Extension() {
       close();
     }
   }, [issue, data.selected, allIssues, close, isEditing]);
-  // [END build-admin-action.connect-api-two]
 
   useEffect(() => {
     if (issueId) {
@@ -126,7 +121,6 @@ function Extension() {
     return <></>;
   }
 
-  // [START build-admin-action.create-ui-three]
   return (
     <s-admin-action title={isEditing ? "Edit your issue" : "Create an issue"}>
       <s-button slot="primaryAction" onClick={onSubmit}>
@@ -183,5 +177,4 @@ function Extension() {
       </s-box>
     </s-admin-action>
   );
-  // [END build-admin-action.create-ui-three]
 }
