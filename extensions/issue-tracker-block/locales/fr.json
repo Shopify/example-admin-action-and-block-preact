@@ -7,7 +7,9 @@
   "option-todo": "À faire",
   "option-completed": "Terminé",
   "delete-issue-button": "Supprimer le problème",
+  "edit-issue-button": "Modifier le problème",
   "add-issue-button": "Ajouter un problème",
   "collapsed-summary": "Pas assez de variantes de produit",
-  "no-issues-text": "Aucun problème pour ce produit"
+  "no-issues-text": "Aucun problème pour ce produit",
+  "add-first-issue-button": "Ajouter votre premier problème"
 }

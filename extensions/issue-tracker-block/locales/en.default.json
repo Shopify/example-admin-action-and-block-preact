@@ -6,7 +6,9 @@
   "option-todo": "Todo",
   "option-completed": "Completed",
   "delete-issue-button": "Delete issue",
+  "edit-issue-button": "Edit issue",
   "add-issue-button": "Add issue",
   "collapsed-summary": "Not enough product variants",
-  "no-issues-text": "No issues for this product"
+  "no-issues-text": "No issues for this product",
+  "add-first-issue-button": "Add your first issue"
 }
