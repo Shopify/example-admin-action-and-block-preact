@@ -1,15 +1,12 @@
 /// <reference types="../../../shopify.d.ts" />
-// [START build-admin-action.create-ui-one]
+
 import { render } from "preact";
 import { useCallback, useEffect, useState } from "preact/hooks";
 import { getIssues, updateIssues } from "./utils";
-// [END build-admin-action.create-ui-one]
 
-// [START build-admin-action.create-ui-two]
 export default function extension() {
   render(<Extension />, document.body);
 }
-// [END build-admin-action.create-ui-two]
 
 function generateId(allIssues) {
   return !allIssues?.length ? 0 : allIssues[allIssues.length - 1].id + 1;
@@ -26,11 +23,14 @@ function validateForm({ title, description }) {
 }
 
 function Extension() {
+  // [START connect-action-block.intent-one]
   const { close, data, intents } = shopify;
   const issueId = intents?.launchUrl
     ? new URL(intents?.launchUrl)?.searchParams?.get("issueId")
     : null;
   const [loading, setLoading] = useState(issueId ? true : false);
+  // [END connect-action-block.intent-one]
+
   const [issue, setIssue] = useState({
     title: "",
     description: "",
@@ -46,7 +46,6 @@ function Extension() {
   const { title, description, id } = issue;
   const isEditing = Boolean(id);
 
-  // [START build-admin-action.connect-api-one]
   useEffect(() => {
     getIssues(data.selected[0].id).then((issues) => {
       setLoading(false);
@@ -54,15 +53,15 @@ function Extension() {
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  // [END build-admin-action.connect-api-one]
 
-  // [START build-admin-action.connect-api-two]
   const onSubmit = useCallback(async () => {
     const { isValid, errors } = validateForm(issue);
     setFormErrors(errors);
 
     if (isValid) {
       const newIssues = [...allIssues];
+
+      // [START connect-action-block.intent-two]
       if (isEditing) {
         // Find the index of the issue that you're editing
         const editingIssueIndex = newIssues.findIndex(
@@ -88,9 +87,9 @@ function Extension() {
       await updateIssues(data.selected[0].id, newIssues);
       // Close the modal using the 'close' API
       close();
+      // [END connect-action-block.intent-two]
     }
   }, [issue, data.selected, allIssues, close, isEditing, title, description]);
-  // [END build-admin-action.connect-api-two]
 
   useEffect(() => {
     if (issueId) {
@@ -107,7 +106,6 @@ function Extension() {
     return <></>;
   }
 
-  // [START build-admin-action.create-ui-three]
   return (
     <s-admin-action title={isEditing ? "Edit your issue" : "Create an issue"}>
       <s-button slot="primaryAction" onClick={onSubmit}>
@@ -140,5 +138,4 @@ function Extension() {
       </s-box>
     </s-admin-action>
   );
-  // [END build-admin-action.create-ui-three]
 }
