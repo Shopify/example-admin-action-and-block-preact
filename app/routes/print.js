@@ -1,11 +1,18 @@
 import { authenticate } from "../shopify.server";
 
 export async function loader({ request }) {
+  // [START build-admin-print-action.print-src-four-a]
   const { cors, admin } = await authenticate.admin(request);
+  // [END build-admin-print-action.print-src-four-a]
+
+  // [START build-admin-print-action.query-params]
   const url = new URL(request.url);
   const query = url.searchParams;
   const docs = query.get("printType").split(",");
   const orderId = query.get("orderId");
+  // [END build-admin-print-action.query-params]
+
+  // [START build-admin-print-action.graphQL-query]
   const response = await admin.graphql(
     `query getOrder($orderId: ID!) {
       order(id: $orderId) {
@@ -26,8 +33,13 @@ export async function loader({ request }) {
   );
   const orderData = await response.json();
   const order = orderData.data.order;
+  // [END build-admin-print-action.graphQL-query]
+
+  // [START build-admin-print-action.print-src-four-b]
   const pages = docs.map((docType) => orderPage(docType, order));
   const print = printHTML(pages);
+  // [END build-admin-print-action.print-src-four-b]
+
   return cors(
     new Response(print, {
       status: 200,
@@ -42,7 +54,10 @@ function orderPage(docType, order) {
   const price = order.totalPriceSet.shopMoney.amount;
   const name = order.name;
   const createdAt = order.createdAt.split("T")[0];
+  // [START build-admin-print-action.email-obfuscation]
   const email = "<!--email_off-->customerhelp@example.com<!--/email_off-->";
+  // [END build-admin-print-action.email-obfuscation]
+
   const orderTemplate = `<main>
       <div>
         <div class="columns">
@@ -72,9 +87,12 @@ function orderPage(docType, order) {
   return orderTemplate;
 }
 
+// [START build-admin-print-action.print-src-three]
 const title = `<title>My order printer</title>`;
+// [END build-admin-print-action.print-src-three]
 
 function printHTML(pages) {
+  // [START build-admin-print-action.print-src-two]
   const pageBreak = `<div class="page-break"></div>`;
   const pageBreakStyles = `
   @media not print {
@@ -89,6 +107,7 @@ function printHTML(pages) {
           page-break-after: always;
         }
       }`;
+  // [END build-admin-print-action.print-src-two]
 
   const joinedPages = pages.join(pageBreak);
   const printTemplate = `<!DOCTYPE html>
