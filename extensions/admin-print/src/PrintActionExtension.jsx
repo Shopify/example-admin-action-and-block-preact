@@ -1,4 +1,3 @@
-/// <reference types="../../../shopify.d.ts" />
 import { useEffect, useState } from "preact/hooks";
 
 // [START build-admin-print-action.create-ui-one]

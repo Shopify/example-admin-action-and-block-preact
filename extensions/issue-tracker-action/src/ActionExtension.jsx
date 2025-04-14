@@ -1,4 +1,3 @@
-/// <reference types="../../../shopify.d.ts" />
 // [START build-admin-action.create-ui-one]
 import { render } from "preact";
 import { useCallback, useEffect, useState } from "preact/hooks";

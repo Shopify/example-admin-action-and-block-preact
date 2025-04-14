@@ -1,5 +1,3 @@
-/// <reference types="../../../shopify.d.ts" />
-
 import { render } from "preact";
 import { useEffect, useMemo, useState } from "preact/hooks";
 
