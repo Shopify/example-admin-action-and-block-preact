@@ -4,8 +4,6 @@ import { useEffect, useState } from "preact/hooks";
 import { render } from "preact";
 // [END build-admin-print-action.create-ui-one]
 
-const baseSrc = `https://cdn.shopify.com/static/extensibility/print-example`;
-
 // [START build-admin-print-action.create-ui-two]
 export default function extension() {
   render(<Extension />, document.body);
