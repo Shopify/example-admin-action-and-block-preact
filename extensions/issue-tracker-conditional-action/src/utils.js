@@ -66,21 +66,18 @@ async function makeGraphQLQuery(query, variables) {
 }
 
 // [START conditional-action-extension.utils]
-export async function getProductVariants(data) {
+// Use direct API calls to fetch data from Shopify.
+// See https://shopify.dev/docs/api/admin-graphql for more information about Shopify's GraphQL API
+export async function getVariantsCount(id) {
   const getProductQuery = {
     query: `query Product($id: ID!) {
       product(id: $id) {
-        title
-        variants(first: 2) {
-          edges {
-            node {
-              id
-            }
-          }
+        variantsCount {
+          count
         }
       }
     }`,
-    variables: { id: data.selected[0].id },
+    variables: { id },
   };
 
   const res = await fetch("shopify:admin/api/graphql.json", {
@@ -93,6 +90,6 @@ export async function getProductVariants(data) {
   }
 
   const productData = await res.json();
-  return productData.data.product.variants.edges;
+  return productData.data.product.variantsCount.count;
 }
 // [END conditional-action-extension.utils]
