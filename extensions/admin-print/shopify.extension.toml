@@ -1,5 +1,5 @@
 # [START print-action-extension.configuration]
-api_version = "2025-07"
+api_version = "2025-10"
 [[extensions]]
 name = "admin-print"
 handle = "admin-print"
