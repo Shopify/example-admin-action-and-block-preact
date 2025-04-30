@@ -1,5 +1,5 @@
 # [START action-extension.configuration]
-api_version = "2025-07"
+api_version = "2025-10"
 
 [[extensions]]
 # Change the merchant-facing name of the extension in locales/en.default.json
