@@ -5,7 +5,7 @@ import { getIssues, updateIssues } from "./utils";
 // [END build-admin-action.create-ui-one]
 
 // [START build-admin-action.create-ui-two]
-export default function extension() {
+export default async () => { {
   render(<Extension />, document.body);
 }
 // [END build-admin-action.create-ui-two]

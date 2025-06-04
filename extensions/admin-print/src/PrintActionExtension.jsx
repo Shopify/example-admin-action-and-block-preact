@@ -5,7 +5,7 @@ import { render } from "preact";
 // [END build-admin-print-action.create-ui-one]
 
 // [START build-admin-print-action.create-ui-two]
-export default function extension() {
+export default async () => { {
   render(<Extension />, document.body);
 }
 // [END build-admin-print-action.create-ui-two]

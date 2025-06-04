@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from "preact/hooks";
 
 import { getIssues, updateIssues } from "../../issue-tracker-block/src/utils";
 
-export default function extension() {
+export default async () => { {
   render(<Extension />, document.body);
 }
 
