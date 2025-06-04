@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from "preact/hooks";
 
 import { updateIssues, getIssues } from "./utils";
 
-export default function extension() {
+export default async () => { {
   render(<Extension />, document.body);
 }
 const PAGE_SIZE = 3;

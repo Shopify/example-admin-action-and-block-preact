@@ -8,7 +8,7 @@ import { updateIssues, getIssues } from "./utils";
 // [END build-admin-block.connect-api-one]
 
 // [START build-admin-block.create-ui-two]
-export default function extension() {
+export default async () => { {
   render(<Extension />, document.body);
 }
 // [END build-admin-block.create-ui-two]

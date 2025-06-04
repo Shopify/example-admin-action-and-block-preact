@@ -2,7 +2,7 @@ import { render } from "preact";
 import { useCallback, useEffect, useState } from "preact/hooks";
 import { getIssues, updateIssues } from "./utils";
 
-export default function extension() {
+export default async () => { {
   render(<Extension />, document.body);
 }
 
