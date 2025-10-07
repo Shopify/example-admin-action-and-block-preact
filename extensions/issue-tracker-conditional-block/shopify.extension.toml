@@ -3,6 +3,7 @@ api_version = "2025-10"
 # Change the merchant-facing name of the extension in locales/en.default.json
 name = "t:name"
 handle = "issue-tracker-conditional-block"
+uid = "3416469a-07e6-10dd-5416-4def7f1a7a1daf323d7a"
 type = "ui_extension"
 
 

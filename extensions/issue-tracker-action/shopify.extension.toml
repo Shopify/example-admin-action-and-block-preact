@@ -5,6 +5,7 @@ api_version = "2025-10"
 # Change the merchant-facing name of the extension in locales/en.default.json
 name = "t:name"
 handle = "issue-tracker-action"
+uid = "799a1dec-3979-a563-117b-d4e5cd6b9808fbc17d0d"
 type = "ui_extension"
 
 # Only 1 target can be specified for each Admin action extension
