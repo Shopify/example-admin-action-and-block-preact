@@ -88,3 +88,4 @@ function Extension() {
     </s-admin-action>
   );
 }
+}

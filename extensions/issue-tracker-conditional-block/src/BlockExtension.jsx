@@ -200,3 +200,4 @@ function Extension() {
   );
   // [END conditional-block-extension.conditional-markup]
 }
+}
