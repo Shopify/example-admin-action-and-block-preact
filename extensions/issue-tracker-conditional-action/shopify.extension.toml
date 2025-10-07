@@ -2,6 +2,7 @@ api_version = "2025-10"
 [[extensions]]
 name = "t:name"
 handle = "conditional-admin-action-extension"
+uid = "3ca7f446-20fb-da23-6b62-b3c1e2852d2bfcf7472e"
 type = "ui_extension"
 
 # Only 1 target can be specified for each Admin action condition extension

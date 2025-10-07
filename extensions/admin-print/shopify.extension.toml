@@ -3,6 +3,7 @@ api_version = "2025-10"
 [[extensions]]
 name = "admin-print"
 handle = "admin-print"
+uid = "1c27ccfb-ebb2-96df-ec26-be0238fc10e2d8f8d8ec"
 type = "ui_extension"
 
 
