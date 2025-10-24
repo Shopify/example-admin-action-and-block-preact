@@ -38,3 +38,11 @@ name = "Issue Tracker"
 description = "Tracks issues logged for this product"
 access.admin = "merchant_read_write"
 # [END build-admin-action.metafield-definition]
+
+# [START build-admin-block.metafield-definition]
+[product.metafields.app.issues]
+type = "json"
+name = "Issue Tracker"
+description = "Tracks issues logged for this product"
+access.admin = "merchant_read_write"
+# [END build-admin-block.metafield-definition]
