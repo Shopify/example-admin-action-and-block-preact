@@ -1,27 +1,25 @@
 export async function updateIssues(id, newIssues) {
   // This example uses metafields to store the data. For more information, refer to https://shopify.dev/docs/apps/custom-data/metafields.
   return await makeGraphQLQuery(
-    `mutation SetMetafield($namespace: String!, $ownerId: ID!, $key: String!, $type: String!, $value: String!) {
-    metafieldDefinitionCreate(
-      definition: {namespace: $namespace, key: $key, name: "Tracked Issues", ownerType: PRODUCT, type: $type, access: {admin: MERCHANT_READ_WRITE}}
-    ) {
-      createdDefinition {
-        id
+    `mutation SetMetafield($ownerId: ID!, $namespace: String!, $key: String!, $type: String!, $value: String!) {
+      metafieldsSet(metafields: [{ownerId: $ownerId, namespace: $namespace, key: $key, type: $type, value: $value}]) {
+        metafields {
+          id
+          namespace
+          key
+          jsonValue
+        }
+        userErrors {
+          field
+          message
+          code
+        }
       }
-    }
-    metafieldsSet(metafields: [{ownerId:$ownerId, namespace:$namespace, key:$key, type:$type, value:$value}]) {
-      userErrors {
-        field
-        message
-        code
-      }
-    }
-  }
-  `,
+    }`,
     {
       ownerId: id,
-      namespace: "$app:issues",
-      key: "issues",
+      namespace: "$app",
+      key: "issues", 
       type: "json",
       value: JSON.stringify(newIssues),
     },
@@ -33,12 +31,11 @@ export async function getIssues(productId) {
   const res = await makeGraphQLQuery(
     `query Product($id: ID!) {
       product(id: $id) {
-        metafield(namespace: "$app:issues", key:"issues") {
+        metafield(namespace: "$app", key: "issues") {
           value
         }
       }
-    }
-  `,
+    }`,
     { id: productId },
   );
 
