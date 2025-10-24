@@ -1,0 +1,5 @@
+[product.metafields.app.issues]
+type = "json"
+name = "Issue Tracker"
+description = "Tracks issues logged for this product"
+access.admin = "merchant_read_write"
