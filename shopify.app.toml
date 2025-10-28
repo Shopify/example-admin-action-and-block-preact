@@ -31,21 +31,10 @@ redirect_urls = [ "https://example.com/api/auth" ]
 [pos]
 embedded = false
 
-# [START build-admin-action.metafield-definition]
+# [START admin-extensions.metafield-definition]
 [product.metafields.app.issues]
 type = "json"
 name = "Issue Tracker"
 description = "Tracks issues logged for this product"
 access.admin = "merchant_read_write"
-# [END build-admin-action.metafield-definition]
-
-# Note: The following definition is identical to the one above.
-# Both tutorials use the same metafield. 
-# Users who complete both tutorials can skip adding the definition twice.
-# [START build-admin-block.metafield-definition]
-[product.metafields.app.issues]
-type = "json"
-name = "Issue Tracker"
-description = "Tracks issues logged for this product"
-access.admin = "merchant_read_write"
-# [END build-admin-block.metafield-definition]
+# [END admin-extensions.metafield-definition]
