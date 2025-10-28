@@ -11,10 +11,6 @@ export default async () => {
   }
   // [END build-admin-action.create-ui-two]
 
-  function generateId(allIssues) {
-    return !allIssues?.length ? 0 : allIssues[allIssues.length - 1].id + 1;
-  }
-
   function validateForm({ title, description }) {
     return {
       isValid: Boolean(title) && Boolean(description),
@@ -102,3 +98,7 @@ export default async () => {
     // [END build-admin-action.create-ui-three]
   }
 };
+
+function generateId(allIssues) {
+  return !allIssues?.length ? 0 : allIssues[allIssues.length - 1].id + 1;
+}
