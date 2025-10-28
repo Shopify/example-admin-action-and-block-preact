@@ -6,9 +6,8 @@ import { getIssues, updateIssues } from "./utils";
 
 // [START build-admin-action.create-ui-two]
 export default async () => {
-  {
-    render(<Extension />, document.body);
-  }
+  render(<Extension />, document.body);
+
   // [END build-admin-action.create-ui-two]
 
   function Extension() {
