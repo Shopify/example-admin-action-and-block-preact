@@ -68,7 +68,7 @@ export default async () => {
         <s-button slot="primary-action" onClick={onSubmit}>
           {i18n.translate("issue-create-button")}
         </s-button>
-        <s-button slot="secondaryActions" onClick={close}>
+        <s-button slot="secondary-actions" onClick={close}>
           {i18n.translate("issue-cancel-button")}
         </s-button>
         <s-text-field
