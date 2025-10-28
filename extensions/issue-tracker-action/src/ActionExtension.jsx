@@ -11,16 +11,6 @@ export default async () => {
   }
   // [END build-admin-action.create-ui-two]
 
-  function validateForm({ title, description }) {
-    return {
-      isValid: Boolean(title) && Boolean(description),
-      errors: {
-        title: !title,
-        description: !description,
-      },
-    };
-  }
-
   function Extension() {
     const { close, data, i18n } = shopify;
     const [issue, setIssue] = useState({ title: "", description: "" });
@@ -101,4 +91,14 @@ export default async () => {
 
 function generateId(allIssues) {
   return !allIssues?.length ? 0 : allIssues[allIssues.length - 1].id + 1;
+}
+
+function validateForm({ title, description }) {
+  return {
+    isValid: Boolean(title) && Boolean(description),
+    errors: {
+      title: !title,
+      description: !description,
+    },
+  };
 }
