@@ -65,7 +65,7 @@ export default async () => {
     // [START build-admin-action.create-ui-three]
     return (
       <s-admin-action heading={i18n.translate("name")}>
-        <s-button slot="primaryAction" onClick={onSubmit}>
+        <s-button slot="primary-action" onClick={onSubmit}>
           {i18n.translate("issue-create-button")}
         </s-button>
         <s-button slot="secondaryActions" onClick={close}>
