@@ -34,14 +34,12 @@ export default async () => {
         const productData = await getIssues(productId);
 
         setLoading(false);
-        if (productData?.data?.product?.metafield?.value) {
-          const parsedIssues = JSON.parse(
-            productData.data.product.metafield.value,
-          );
+        if (productData) {
+          // productData is returned from getIssues() as the parsed metafield value 
           setInitialValues(
-            parsedIssues.map(({ completed }) => Boolean(completed)),
+            productData.map(({ completed }) => Boolean(completed)),
           );
-          setIssues(parsedIssues);
+          setIssues(productData);
         }
       })();
     }, [productId]);
