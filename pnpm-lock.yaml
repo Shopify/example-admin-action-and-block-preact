@@ -112,46 +112,46 @@ importers:
     dependencies:
       '@shopify/ui-extensions':
         specifier: 2025-10
-        version: 0.0.0-2025-10-rc-20250429184054
+        version: 2025.10.11(@preact/signals@2.0.3(preact@10.26.10))(preact@10.26.10)
       preact:
-        specifier: ^10.10.x
-        version: 10.26.5
+        specifier: ^10.26.x
+        version: 10.26.10
 
   extensions/issue-tracker-action:
     dependencies:
       '@shopify/ui-extensions':
         specifier: 2025-10
-        version: 0.0.0-2025-10-rc-20250429184054
+        version: 2025.10.11(@preact/signals@2.0.3(preact@10.26.10))(preact@10.26.10)
       preact:
-        specifier: ^10.10.x
-        version: 10.26.5
+        specifier: ^10.26.x
+        version: 10.26.10
 
   extensions/issue-tracker-block:
     dependencies:
       '@shopify/ui-extensions':
         specifier: 2025-10
-        version: 0.0.0-2025-10-rc-20250429184054
+        version: 2025.10.11(@preact/signals@2.0.3(preact@10.26.10))(preact@10.26.10)
       preact:
-        specifier: ^10.10.x
-        version: 10.26.5
+        specifier: ^10.26.x
+        version: 10.26.10
 
   extensions/issue-tracker-conditional-action:
     dependencies:
       '@shopify/ui-extensions':
         specifier: 2025-10
-        version: 0.0.0-2025-10-rc-20250429184054
+        version: 2025.10.11(@preact/signals@2.0.3(preact@10.26.10))(preact@10.26.10)
       preact:
-        specifier: ^10.10.x
-        version: 10.26.5
+        specifier: ^10.26.x
+        version: 10.26.10
 
   extensions/issue-tracker-conditional-block:
     dependencies:
       '@shopify/ui-extensions':
         specifier: 2025-10
-        version: 0.0.0-2025-10-rc-20250429184054
+        version: 2025.10.11(@preact/signals@2.0.3(preact@10.26.10))(preact@10.26.10)
       preact:
-        specifier: ^10.10.x
-        version: 10.26.5
+        specifier: ^10.26.x
+        version: 10.26.10
 
 packages:
 
@@ -776,6 +776,7 @@ packages:
   '@graphql-tools/prisma-loader@8.0.17':
     resolution: {integrity: sha512-fnuTLeQhqRbA156pAyzJYN0KxCjKYRU5bz1q/SKOwElSnAU4k7/G1kyVsWLh7fneY78LoMNH5n+KlFV8iQlnyg==}
     engines: {node: '>=16.0.0'}
+    deprecated: 'This package was intended to be used with an older versions of Prisma.\nThe newer versions of Prisma has a different approach to GraphQL integration.\nTherefore, this package is no longer needed and has been deprecated and removed.\nLearn more: https://www.prisma.io/graphql'
     peerDependencies:
       graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
 
@@ -978,8 +979,8 @@ packages:
     resolution: {integrity: sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==}
     engines: {node: '>=14'}
 
-  '@preact/signals-core@1.8.0':
-    resolution: {integrity: sha512-OBvUsRZqNmjzCZXWLxkZfhcgT+Fk8DDcT/8vD6a1xhDemodyy87UJRJfASMuSD8FaAIeGgGm85ydXhm7lr4fyA==}
+  '@preact/signals-core@1.12.1':
+    resolution: {integrity: sha512-BwbTXpj+9QutoZLQvbttRg5x3l5468qaV2kufh+51yha1c53ep5dY4kTuZR35+3pAZxpfQerGJiQqg34ZNZ6uA==}
 
   '@preact/signals@2.0.3':
     resolution: {integrity: sha512-ZdC6w8+LdCMeALEoJgzwEAGw2YahqWGCQLfzRCRvRGC411SzcJOiti5gEqrSN+tKtGqMgicHtQ/eUUxWGTBw0A==}
@@ -1239,8 +1240,16 @@ packages:
   '@shopify/storefront-api-client@1.0.9':
     resolution: {integrity: sha512-vgc0ZczMvrbsQQFYcIIONnIiqiafpcMyq5osI8X6PB65DhnmCQEp3kSlXKOjBPzyAWYvp28nLHS0+r4xsp4yQA==}
 
-  '@shopify/ui-extensions@0.0.0-2025-10-rc-20250429184054':
-    resolution: {integrity: sha512-uW5ehsgamZF4/hgWAPAenz3nZr43pP0qoBixSDF4V2QL5Qk6GA4amZsIfvIgvIi53RQCWwJ7KMpKg/LRmALuoA==}
+  '@shopify/ui-extensions@2025.10.11':
+    resolution: {integrity: sha512-YmGEgkbHT5AylQNu2Qm1jWFsoSgiTvanc1bnWGmwmKlPJ9USsqUnUK+ZGBT/7C8w4Jj3kx+HuKibVmajHJ019w==}
+    peerDependencies:
+      '@preact/signals': '*'
+      preact: '*'
+    peerDependenciesMeta:
+      '@preact/signals':
+        optional: true
+      preact:
+        optional: true
 
   '@ts-morph/common@0.26.1':
     resolution: {integrity: sha512-Sn28TGl/4cFpcM+jwsH1wLncYq3FtN/BIpem+HOygfBWPT5pAeS5dB4VFVzV8FbnOKHpDLZmvAl4AjPEev5idA==}
@@ -2815,6 +2824,7 @@ packages:
   node-domexception@1.0.0:
     resolution: {integrity: sha512-/jKZoMpw0F8GRwl4/eLROPA3cfcXtLApP0QzLmUT/HuPCZWyB7IY9ZrMeKw2O/nFIqPQB3PVM9aYm0F312AXDQ==}
     engines: {node: '>=10.5.0'}
+    deprecated: Use your platform's native DOMException instead
 
   node-fetch@2.7.0:
     resolution: {integrity: sha512-c4FRfUm/dbcWZ7U+1Wq0AwCyFL+3nt2bEw05wfxSz+DWpWsitgmSgYmy2dQdWyKC1694ELPqMs/YzUSNozLt8A==}
@@ -3035,8 +3045,8 @@ packages:
     resolution: {integrity: sha512-dle9A3yYxlBSrt8Fu+IpjGT8SY8hN0mlaA6GY8t0P5PjIOZemULz/E2Bnm/2dcUOena75OTNkHI76uZBNUUq3A==}
     engines: {node: ^10 || ^12 || >=14}
 
-  preact@10.26.5:
-    resolution: {integrity: sha512-fmpDkgfGU6JYux9teDWLhj9mKN55tyepwYbxHgQuIxbWQzgFg5vk7Mrrtfx7xRxq798ynkY4DDDxZr235Kk+4w==}
+  preact@10.26.10:
+    resolution: {integrity: sha512-sqdfdSa8AZeJ+wfMYjFImIRTnhfyPSLCH+LEb1+BoRUDKLnE6AnvZeClx3Bkj2Q9nn44GFAefOKIx5oc54q93A==}
 
   prelude-ls@1.2.1:
     resolution: {integrity: sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==}
@@ -4887,13 +4897,13 @@ snapshots:
   '@pkgjs/parseargs@0.11.0':
     optional: true
 
-  '@preact/signals-core@1.8.0':
+  '@preact/signals-core@1.12.1':
     optional: true
 
-  '@preact/signals@2.0.3(preact@10.26.5)':
+  '@preact/signals@2.0.3(preact@10.26.10)':
     dependencies:
-      '@preact/signals-core': 1.8.0
-      preact: 10.26.5
+      '@preact/signals-core': 1.12.1
+      preact: 10.26.10
     optional: true
 
   '@prisma/client@6.6.0(prisma@6.6.0(typescript@5.8.3))(typescript@5.8.3)':
@@ -5164,12 +5174,12 @@ snapshots:
     dependencies:
       '@shopify/graphql-client': 1.4.1
 
-  '@shopify/ui-extensions@0.0.0-2025-10-rc-20250429184054':
+  '@shopify/ui-extensions@2025.10.11(@preact/signals@2.0.3(preact@10.26.10))(preact@10.26.10)':
     dependencies:
       ts-morph: 25.0.1
     optionalDependencies:
-      '@preact/signals': 2.0.3(preact@10.26.5)
-      preact: 10.26.5
+      '@preact/signals': 2.0.3(preact@10.26.10)
+      preact: 10.26.10
 
   '@ts-morph/common@0.26.1':
     dependencies:
@@ -7196,7 +7206,7 @@ snapshots:
       picocolors: 1.1.1
       source-map-js: 1.2.1
 
-  preact@10.26.5: {}
+  preact@10.26.10: {}
 
   prelude-ls@1.2.1: {}
 
