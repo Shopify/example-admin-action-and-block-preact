@@ -23,8 +23,8 @@ importers:
         specifier: ^7.9.1
         version: 7.9.3(@react-router/dev@7.9.3(@react-router/serve@7.9.3(react-router@7.9.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(typescript@5.8.3))(@types/node@22.14.0)(jiti@2.4.2)(react-router@7.9.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(typescript@5.8.3)(vite@6.2.6(@types/node@22.14.0)(jiti@2.4.2)(yaml@2.7.1))(yaml@2.7.1))(typescript@5.8.3)
       '@react-router/node':
-        specifier: ^7.9.1
-        version: 7.9.3(react-router@7.9.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(typescript@5.8.3)
+        specifier: ^7.12.0
+        version: 7.12.0(react-router@7.9.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(typescript@5.8.3)
       '@react-router/serve':
         specifier: ^7.9.1
         version: 7.9.3(react-router@7.9.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(typescript@5.8.3)
@@ -1053,6 +1053,16 @@ packages:
     engines: {node: '>=20.0.0'}
     peerDependencies:
       '@react-router/dev': ^7.9.3
+      typescript: ^5.1.0
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+
+  '@react-router/node@7.12.0':
+    resolution: {integrity: sha512-o/t10Cse4LK8kFefqJ8JjC6Ng6YuKD2I87S2AiJs17YAYtXU5W731ZqB73AWyCDd2G14R0dSuqXiASRNK/xLjg==}
+    engines: {node: '>=20.0.0'}
+    peerDependencies:
+      react-router: 7.12.0
       typescript: ^5.1.0
     peerDependenciesMeta:
       typescript:
@@ -4991,6 +5001,13 @@ snapshots:
     dependencies:
       '@react-router/dev': 7.9.3(@react-router/serve@7.9.3(react-router@7.9.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(typescript@5.8.3))(@types/node@22.14.0)(jiti@2.4.2)(react-router@7.9.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(typescript@5.8.3)(vite@6.2.6(@types/node@22.14.0)(jiti@2.4.2)(yaml@2.7.1))(yaml@2.7.1)
       minimatch: 9.0.5
+    optionalDependencies:
+      typescript: 5.8.3
+
+  '@react-router/node@7.12.0(react-router@7.9.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(typescript@5.8.3)':
+    dependencies:
+      '@mjackson/node-fetch-server': 0.2.0
+      react-router: 7.9.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
     optionalDependencies:
       typescript: 5.8.3
 
