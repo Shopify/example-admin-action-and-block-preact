@@ -111,11 +111,11 @@ function Extension() {
     >
       <s-button slot="primaryAction" onClick={onSubmit}>
         {isEditing
-          ? i18n.translate("save-button")
-          : i18n.translate("create-button")}
+          ? i18n.translate("issue-save-button")
+          : i18n.translate("issue-create-button")}
       </s-button>
       <s-button slot="secondaryActions" onClick={close}>
-        {i18n.translate("cancel-button")}
+        {i18n.translate("issue-cancel-button")}
       </s-button>
       <s-text-field
         value={title}
