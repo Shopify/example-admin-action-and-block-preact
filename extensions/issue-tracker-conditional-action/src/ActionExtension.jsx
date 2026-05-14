@@ -56,10 +56,10 @@ export default async () => {
 
     return (
       <s-admin-action heading={i18n.translate("create-issue-heading")}>
-        <s-button slot="primaryAction" onClick={onSubmit}>
+        <s-button slot="primary-action" onClick={onSubmit}>
           {i18n.translate("issue-create-button")}
         </s-button>
-        <s-button slot="secondaryActions" onClick={close}>
+        <s-button slot="secondary-actions" onClick={close}>
           {i18n.translate("issue-cancel-button")}
         </s-button>
         <s-text-field
