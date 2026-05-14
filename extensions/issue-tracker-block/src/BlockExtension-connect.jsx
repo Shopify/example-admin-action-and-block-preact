@@ -136,7 +136,7 @@ function Extension() {
                             label={i18n.translate("status-column-heading")}
                             value={completed ? "completed" : "todo"}
                             onChange={(event) =>
-                              handleChange(id, event.target.value)
+                              handleChange(id, (/** @type {HTMLInputElement} */ (event.target)).value)
                             }
                           >
                             <s-option value="todo">

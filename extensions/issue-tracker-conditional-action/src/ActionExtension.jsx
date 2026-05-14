@@ -68,7 +68,7 @@ export default async () => {
             formErrors?.title ? i18n.translate("issue-title-error") : undefined
           }
           onChange={(event) =>
-            setIssue((prev) => ({ ...prev, title: event.target.value }))
+            setIssue((prev) => ({ ...prev, title: (/** @type {HTMLInputElement} */ (event.target)).value }))
           }
           label={i18n.translate("issue-title-label")}
           maxLength={50}
@@ -82,7 +82,7 @@ export default async () => {
                 : undefined
             }
             onChange={(event) =>
-              setIssue((prev) => ({ ...prev, description: event.target.value }))
+              setIssue((prev) => ({ ...prev, description: (/** @type {HTMLInputElement} */ (event.target)).value }))
             }
             label={i18n.translate("issue-description-label")}
             max-length={300}

@@ -1,5 +1,5 @@
 # [START block-extension.configuration]
-api_version = "2025-10"
+api_version = "2026-04"
 
 [[extensions]]
 # Change the merchant-facing name of the extension in locales/en.default.json

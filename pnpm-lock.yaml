@@ -111,8 +111,8 @@ importers:
   extensions/admin-print:
     dependencies:
       '@shopify/ui-extensions':
-        specifier: 2025-10
-        version: 0.0.0-2025-10-rc-20250429184054
+        specifier: 2026-04
+        version: 2026.4.2(@preact/signals@2.0.3(preact@10.26.5))(preact@10.26.5)
       preact:
         specifier: ^10.10.x
         version: 10.26.5
@@ -120,8 +120,8 @@ importers:
   extensions/issue-tracker-action:
     dependencies:
       '@shopify/ui-extensions':
-        specifier: 2025-10
-        version: 0.0.0-2025-10-rc-20250429184054
+        specifier: 2026-04
+        version: 2026.4.2(@preact/signals@2.0.3(preact@10.26.5))(preact@10.26.5)
       preact:
         specifier: ^10.10.x
         version: 10.26.5
@@ -129,8 +129,8 @@ importers:
   extensions/issue-tracker-block:
     dependencies:
       '@shopify/ui-extensions':
-        specifier: 2025-10
-        version: 0.0.0-2025-10-rc-20250429184054
+        specifier: 2026-04
+        version: 2026.4.2(@preact/signals@2.0.3(preact@10.26.5))(preact@10.26.5)
       preact:
         specifier: ^10.10.x
         version: 10.26.5
@@ -138,8 +138,8 @@ importers:
   extensions/issue-tracker-conditional-action:
     dependencies:
       '@shopify/ui-extensions':
-        specifier: 2025-10
-        version: 0.0.0-2025-10-rc-20250429184054
+        specifier: 2026-04
+        version: 2026.4.2(@preact/signals@2.0.3(preact@10.26.5))(preact@10.26.5)
       preact:
         specifier: ^10.10.x
         version: 10.26.5
@@ -147,8 +147,8 @@ importers:
   extensions/issue-tracker-conditional-block:
     dependencies:
       '@shopify/ui-extensions':
-        specifier: 2025-10
-        version: 0.0.0-2025-10-rc-20250429184054
+        specifier: 2026-04
+        version: 2026.4.2(@preact/signals@2.0.3(preact@10.26.5))(preact@10.26.5)
       preact:
         specifier: ^10.10.x
         version: 10.26.5
@@ -1249,8 +1249,16 @@ packages:
   '@shopify/storefront-api-client@1.0.9':
     resolution: {integrity: sha512-vgc0ZczMvrbsQQFYcIIONnIiqiafpcMyq5osI8X6PB65DhnmCQEp3kSlXKOjBPzyAWYvp28nLHS0+r4xsp4yQA==}
 
-  '@shopify/ui-extensions@0.0.0-2025-10-rc-20250429184054':
-    resolution: {integrity: sha512-uW5ehsgamZF4/hgWAPAenz3nZr43pP0qoBixSDF4V2QL5Qk6GA4amZsIfvIgvIi53RQCWwJ7KMpKg/LRmALuoA==}
+  '@shopify/ui-extensions@2026.4.2':
+    resolution: {integrity: sha512-EQN9zxtD3WKjk8Y1+wMzgzb7QZhiGGB+xmCWGVxvLxOfopz3uNukbloxj6ZH2Xl2KZeS88kuzdjTksFB2vo2fw==}
+    peerDependencies:
+      '@preact/signals': '*'
+      preact: '*'
+    peerDependenciesMeta:
+      '@preact/signals':
+        optional: true
+      preact:
+        optional: true
 
   '@ts-morph/common@0.26.1':
     resolution: {integrity: sha512-Sn28TGl/4cFpcM+jwsH1wLncYq3FtN/BIpem+HOygfBWPT5pAeS5dB4VFVzV8FbnOKHpDLZmvAl4AjPEev5idA==}
@@ -5181,7 +5189,7 @@ snapshots:
     dependencies:
       '@shopify/graphql-client': 1.4.1
 
-  '@shopify/ui-extensions@0.0.0-2025-10-rc-20250429184054':
+  '@shopify/ui-extensions@2026.4.2(@preact/signals@2.0.3(preact@10.26.5))(preact@10.26.5)':
     dependencies:
       ts-morph: 25.0.1
     optionalDependencies:

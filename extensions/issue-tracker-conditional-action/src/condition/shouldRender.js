@@ -1,5 +1,3 @@
-/// <reference types="../../../../shopify.d.ts" />
-
 // [START conditional-action-extension.module]
 import { getVariantsCount } from "../utils";
 
