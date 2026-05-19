@@ -56,10 +56,10 @@ export default async () => {
 
     return (
       <s-admin-action heading={i18n.translate("create-issue-heading")}>
-        <s-button slot="primaryAction" onClick={onSubmit}>
+        <s-button slot="primary-action" onClick={onSubmit}>
           {i18n.translate("issue-create-button")}
         </s-button>
-        <s-button slot="secondaryActions" onClick={close}>
+        <s-button slot="secondary-actions" onClick={close}>
           {i18n.translate("issue-cancel-button")}
         </s-button>
         <s-text-field
@@ -68,7 +68,7 @@ export default async () => {
             formErrors?.title ? i18n.translate("issue-title-error") : undefined
           }
           onChange={(event) =>
-            setIssue((prev) => ({ ...prev, title: event.target.value }))
+            setIssue((prev) => ({ ...prev, title: (/** @type {HTMLInputElement} */ (event.target)).value }))
           }
           label={i18n.translate("issue-title-label")}
           maxLength={50}
@@ -82,7 +82,7 @@ export default async () => {
                 : undefined
             }
             onChange={(event) =>
-              setIssue((prev) => ({ ...prev, description: event.target.value }))
+              setIssue((prev) => ({ ...prev, description: (/** @type {HTMLInputElement} */ (event.target)).value }))
             }
             label={i18n.translate("issue-description-label")}
             max-length={300}

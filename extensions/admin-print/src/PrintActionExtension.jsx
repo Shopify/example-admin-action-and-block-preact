@@ -61,16 +61,16 @@ export default async () => {
           <s-checkbox
             name="Invoice"
             checked={printInvoice}
-            onChange={(value) => {
-              setPrintInvoice(value);
+            onChange={(event) => {
+              setPrintInvoice((/** @type {HTMLInputElement} */ (event.target)).checked);
             }}
             label={i18n.translate("invoice")}
           ></s-checkbox>
           <s-checkbox
             name="Packing Slips"
             checked={printPackingSlip}
-            onChange={(value) => {
-              setPrintPackingSlip(value);
+            onChange={(event) => {
+              setPrintPackingSlip((/** @type {HTMLInputElement} */ (event.target)).checked);
             }}
             label={i18n.translate("packingSlip")}
           ></s-checkbox>

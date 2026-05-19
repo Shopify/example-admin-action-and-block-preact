@@ -136,7 +136,7 @@ export default async () => {
                             labelAccessibilityVisibility="exclusive"
                             label={i18n.translate("select-label")}
                             value={completed ? "completed" : "todo"}
-                            onChange={(e) => handleChange(id, e.target.value)}
+                            onChange={(e) => handleChange(id, (/** @type {HTMLInputElement} */ (e.target)).value)}
                           >
                             <s-option value="todo">
                               {i18n.translate("option-todo")}
@@ -191,7 +191,7 @@ export default async () => {
     // Only render the block body if there is more than one variant, otherwise, return null to collapse the block
     return (
       <s-admin-block
-        title={i18n.translate("name")}
+        heading={i18n.translate("name")}
         collapsedSummary={
           !shouldRender ? i18n.translate("collapsed-summary") : null
         }

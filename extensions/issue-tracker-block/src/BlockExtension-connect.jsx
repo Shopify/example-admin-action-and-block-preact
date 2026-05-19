@@ -134,9 +134,9 @@ function Extension() {
                           <s-select
                             labelAccessibilityVisibility="exclusive"
                             label={i18n.translate("status-column-heading")}
-                            defaultValue={completed ? "completed" : "todo"}
+                            value={completed ? "completed" : "todo"}
                             onChange={(event) =>
-                              handleChange(id, event.target.value)
+                              handleChange(id, (/** @type {HTMLInputElement} */ (event.target)).value)
                             }
                           >
                             <s-option value="todo">
