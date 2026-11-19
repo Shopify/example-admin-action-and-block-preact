@@ -3,12 +3,12 @@ import { useEffect, useMemo, useState } from "preact/hooks";
 
 import { getIssues, updateIssues } from "../../issue-tracker-block/src/utils";
 
+const PAGE_SIZE = 3;
+
 export default async () => {
   {
     render(<Extension />, document.body);
   }
-
-  const PAGE_SIZE = 3;
 
   function Extension() {
     const { i18n, data, navigation } = shopify;
@@ -19,7 +19,6 @@ export default async () => {
     const totalPages = issuesCount / PAGE_SIZE;
 
     const [loading, setLoading] = useState(true);
-    const [_, setInitialValues] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
 
     // [START conditional-block-extension.has-variants]
@@ -36,14 +35,9 @@ export default async () => {
         }
         // [END conditional-block-extension.has-variants]
 
-        if (productData?.data?.product?.metafield?.value) {
-          const parsedIssues = JSON.parse(
-            productData.data.product.metafield.value,
-          );
-          setInitialValues(
-            parsedIssues.map(({ completed }) => Boolean(completed)),
-          );
-          setIssues(parsedIssues);
+        // getIssues returns the parsed array, or undefined if there are no issues yet
+        if (Array.isArray(productData)) {
+          setIssues(productData);
         }
       })();
     }, [productId]);
@@ -135,6 +129,7 @@ export default async () => {
                           <s-select
                             labelAccessibilityVisibility="exclusive"
                             label={i18n.translate("select-label")}
+                            name={`status-${id}`}
                             value={completed ? "completed" : "todo"}
                             onChange={(e) => handleChange(id, (/** @type {HTMLInputElement} */ (e.target)).value)}
                           >

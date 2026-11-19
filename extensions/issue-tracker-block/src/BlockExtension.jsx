@@ -7,19 +7,19 @@ import { useEffect, useMemo, useState } from "preact/hooks";
 import { updateIssues, getIssues } from "./utils";
 // [END build-admin-block.connect-api-one]
 
+const PAGE_SIZE = 3;
+
 // [START build-admin-block.create-ui-two]
 export default async () => {
   {
     render(<Extension />, document.body);
   }
   // [END build-admin-block.create-ui-two]
-  const PAGE_SIZE = 3;
 
   function Extension() {
     const { data, i18n } = shopify;
 
     const [loading, setLoading] = useState(true);
-    const [_, setInitialValues] = useState([]);
     const [issues, setIssues] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
 
@@ -30,18 +30,13 @@ export default async () => {
 
     useEffect(() => {
       (async function getProductInfo() {
-        // Load the product's metafield of type issues
-        const productData = await getIssues(productId);
+        // Load the issues stored in the product's metafield.
+        // getIssues returns the parsed array, or undefined if there are no issues yet
+        const productIssues = await getIssues(productId);
 
         setLoading(false);
-        if (productData?.data?.product?.metafield?.value) {
-          const parsedIssues = JSON.parse(
-            productData.data.product.metafield.value,
-          );
-          setInitialValues(
-            parsedIssues.map(({ completed }) => Boolean(completed)),
-          );
-          setIssues(parsedIssues);
+        if (Array.isArray(productIssues)) {
+          setIssues(productIssues);
         }
       })();
     }, [productId]);
@@ -89,7 +84,6 @@ export default async () => {
       // Commit changes to the database
       await updateIssues(productId, newIssues);
     };
-    // [END build-admin-block.add-change-and-delete-handlers]
 
     const onSubmit = (event) => {
       // Commit changes to the database
@@ -97,6 +91,7 @@ export default async () => {
     };
 
     const onReset = () => {};
+    // [END build-admin-block.add-change-and-delete-handlers]
 
     // [START build-admin-block.create-ui-three]
     if (loading) {
@@ -139,9 +134,16 @@ export default async () => {
                         </s-stack>
                       </s-table-cell>
                       <s-table-cell>
+                        {/* [START build-admin-block.status-select] */}
+                        {/* The contextual save bar only tracks form fields that have a name */}
                         <s-select
                           labelAccessibilityVisibility="exclusive"
                           label={i18n.translate("select-label")}
+                          name={`status-${id}`}
+                          value={completed ? "completed" : "todo"}
+                          onChange={(event) =>
+                            handleChange(id, (/** @type {HTMLInputElement} */ (event.target)).value)
+                          }
                         >
                           <s-option value="todo">
                             {i18n.translate("option-todo")}
@@ -150,6 +152,7 @@ export default async () => {
                             {i18n.translate("option-completed")}
                           </s-option>
                         </s-select>
+                        {/* [END build-admin-block.status-select] */}
                       </s-table-cell>
                       <s-table-cell>
                         <s-button
