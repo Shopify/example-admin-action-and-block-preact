@@ -2,6 +2,7 @@ import { render } from "preact";
 import { useEffect, useMemo, useState } from "preact/hooks";
 
 import { getIssues, updateIssues } from "../../issue-tracker-block/src/utils";
+import { getVariantsCount } from "../../issue-tracker-conditional-action/src/utils";
 
 const PAGE_SIZE = 3;
 
@@ -13,6 +14,8 @@ export default async () => {
   function Extension() {
     const { i18n, data, navigation } = shopify;
     const [issues, setIssues] = useState([]);
+    // The issues as they were last saved, to restore when the merchant discards changes
+    const [savedIssues, setSavedIssues] = useState([]);
 
     const productId = data.selected[0].id;
     const issuesCount = issues.length;
@@ -26,18 +29,21 @@ export default async () => {
 
     useEffect(() => {
       (async function getProductInfo() {
-        const productData = await getIssues(productId);
+        // Only show the block's content if the product has more than one variant
+        const variantsCount = await getVariantsCount(productId);
 
-        setLoading(false);
-
-        if (productData?.data?.product?.variants?.edges.length > 1) {
+        if (variantsCount > 1) {
           setShouldRender(true);
         }
         // [END conditional-block-extension.has-variants]
 
         // getIssues returns the parsed array, or undefined if there are no issues yet
-        if (Array.isArray(productData)) {
-          setIssues(productData);
+        const productIssues = await getIssues(productId);
+
+        setLoading(false);
+        if (Array.isArray(productIssues)) {
+          setIssues(productIssues);
+          setSavedIssues(productIssues);
         }
       })();
     }, [productId]);
@@ -54,7 +60,6 @@ export default async () => {
         currentPage * PAGE_SIZE,
       );
     }, [issuesCount, issues, currentPage]);
-    console.log({ paginatedIssues });
 
     const handleChange = async (id, value) => {
       // Update the local state of the extension to reflect changes
@@ -77,20 +82,27 @@ export default async () => {
     };
 
     const handleDelete = async (id) => {
-      // Create a new array of issues, leaving out the one that you're deleting
-      const newIssues = issues.filter((issue) => issue.id !== id);
-      // Save to the local state
-      setIssues(newIssues);
-      // Commit changes to the database
-      await updateIssues(productId, newIssues);
+      // Create a new array of saved issues, leaving out the one that you're deleting
+      const newSavedIssues = savedIssues.filter((issue) => issue.id !== id);
+      // Remove the issue from the local state, keeping any unsaved status changes
+      setIssues((currentIssues) =>
+        currentIssues.filter((issue) => issue.id !== id),
+      );
+      setSavedIssues(newSavedIssues);
+      // Commit the deletion to the database
+      await updateIssues(productId, newSavedIssues);
     };
 
     const onSubmit = async () => {
-      // Commit changes to the database
+      // Commit changes to the database, then remember them as the saved issues
       await updateIssues(productId, issues);
+      setSavedIssues(issues);
     };
 
-    const onReset = () => {};
+    const onReset = () => {
+      // The merchant discarded their changes, so restore the last saved issues
+      setIssues(savedIssues);
+    };
 
     const blockMarkup = loading ? (
       <s-spinner></s-spinner>

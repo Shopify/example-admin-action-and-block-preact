@@ -15,6 +15,8 @@ function Extension() {
 
   const [loading, setLoading] = useState(true);
   const [issues, setIssues] = useState([]);
+  // The issues as they were last saved, to restore when the merchant discards changes
+  const [savedIssues, setSavedIssues] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
 
   const productId = data.selected[0].id;
@@ -30,6 +32,7 @@ function Extension() {
       setLoading(false);
       if (Array.isArray(productIssues)) {
         setIssues(productIssues);
+        setSavedIssues(productIssues);
       }
     })();
   }, [productId]);
@@ -68,20 +71,28 @@ function Extension() {
   };
 
   const handleDelete = async (id) => {
-    // Create a new array of issues, leaving out the one that you're deleting
-    const newIssues = issues.filter((issue) => issue.id !== id);
-    // Save to the local state
-    setIssues(newIssues);
-    // Commit changes to the database
-    await updateIssues(productId, newIssues);
+    // Create a new array of saved issues, leaving out the one that you're deleting
+    const newSavedIssues = savedIssues.filter((issue) => issue.id !== id);
+    // Remove the issue from the local state, keeping any unsaved status changes
+    setIssues((currentIssues) =>
+      currentIssues.filter((issue) => issue.id !== id),
+    );
+    setSavedIssues(newSavedIssues);
+    // Commit the deletion to the database
+    await updateIssues(productId, newSavedIssues);
   };
 
   const onSubmit = (event) => {
-    // Commit changes to the database
-    event.waitUntil(updateIssues(productId, issues));
+    // Commit changes to the database, then remember them as the saved issues
+    event.waitUntil(
+      updateIssues(productId, issues).then(() => setSavedIssues(issues)),
+    );
   };
 
-  const onReset = () => {};
+  const onReset = () => {
+    // The merchant discarded their changes, so restore the last saved issues
+    setIssues(savedIssues);
+  };
 
   if (loading) {
     return (
