@@ -1,3 +1,25 @@
+import { useEffect, useState } from "preact/hooks";
+
+// How often to check whether the merchant has moved to another product
+const PRODUCT_CHECK_INTERVAL_MS = 500;
+
+// The admin can keep a block running when the merchant moves from one product to
+// another without a full page load. Read the product ID from `shopify.data` on an
+// interval, rather than once when the block first renders, so the block reloads
+// for the new product instead of showing, and saving, the previous one's issues.
+export function useProductId() {
+  const [productId, setProductId] = useState(() => shopify.data.selected[0]?.id);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setProductId(shopify.data.selected[0]?.id);
+    }, PRODUCT_CHECK_INTERVAL_MS);
+    return () => clearInterval(interval);
+  }, []);
+
+  return productId;
+}
+
 export async function updateIssues(id, newIssues) {
   // This example uses metafields to store the data. For more information, refer to https://shopify.dev/docs/apps/custom-data/metafields.
   const res = await makeGraphQLQuery(

@@ -1,7 +1,11 @@
 import { render } from "preact";
 import { useEffect, useMemo, useState } from "preact/hooks";
 
-import { getIssues, updateIssues } from "../../issue-tracker-block/src/utils";
+import {
+  getIssues,
+  updateIssues,
+  useProductId,
+} from "../../issue-tracker-block/src/utils";
 import { getVariantsCount } from "../../issue-tracker-conditional-action/src/utils";
 
 const PAGE_SIZE = 3;
@@ -12,12 +16,13 @@ export default async () => {
   }
 
   function Extension() {
-    const { i18n, data, navigation } = shopify;
+    const { i18n, navigation } = shopify;
     const [issues, setIssues] = useState([]);
     // The issues as they were last saved, to restore when the merchant discards changes
     const [savedIssues, setSavedIssues] = useState([]);
 
-    const productId = data.selected[0].id;
+    // The product being viewed, updated if the merchant moves to another product
+    const productId = useProductId();
     const issuesCount = issues.length;
     const totalPages = issuesCount / PAGE_SIZE;
 
@@ -28,6 +33,16 @@ export default async () => {
     const [shouldRender, setShouldRender] = useState(false);
 
     useEffect(() => {
+      // Ignore the responses if the merchant moves to another product before they arrive
+      let stale = false;
+
+      // Start from an empty, collapsed block, so the previous product's issues never show
+      setLoading(true);
+      setShouldRender(false);
+      setIssues([]);
+      setSavedIssues([]);
+      setCurrentPage(1);
+
       (async function getProductInfo() {
         try {
           // Fetch the variants count and the issues at the same time.
@@ -36,11 +51,10 @@ export default async () => {
             getVariantsCount(productId),
             getIssues(productId),
           ]);
+          if (stale) return;
 
           // Only show the block's content if the product has more than one variant
-          if (variantsCount > 1) {
-            setShouldRender(true);
-          }
+          setShouldRender(variantsCount > 1);
           // [END conditional-block-extension.has-variants]
 
           if (Array.isArray(productIssues)) {
@@ -51,9 +65,13 @@ export default async () => {
           console.error(error);
         } finally {
           // Always leave the loading state, even if a request failed
-          setLoading(false);
+          if (!stale) setLoading(false);
         }
       })();
+
+      return () => {
+        stale = true;
+      };
     }, [productId]);
 
     const paginatedIssues = useMemo(() => {

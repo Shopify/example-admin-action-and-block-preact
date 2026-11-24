@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "preact/hooks";
 // [END build-admin-block.create-ui-one]
 
 // [START build-admin-block.connect-api-one]
-import { updateIssues, getIssues } from "./utils";
+import { updateIssues, getIssues, useProductId } from "./utils";
 // [END build-admin-block.connect-api-one]
 
 const PAGE_SIZE = 3;
@@ -17,7 +17,7 @@ export default async () => {
   // [END build-admin-block.create-ui-two]
 
   function Extension() {
-    const { data, i18n } = shopify;
+    const { i18n } = shopify;
 
     const [loading, setLoading] = useState(true);
     const [issues, setIssues] = useState([]);
@@ -26,15 +26,26 @@ export default async () => {
     const [currentPage, setCurrentPage] = useState(1);
 
     // [START build-admin-block.get-initial-data]
-    const productId = data.selected[0].id;
+    // The product being viewed, updated if the merchant moves to another product
+    const productId = useProductId();
     const issuesCount = issues.length;
     const totalPages = issuesCount / PAGE_SIZE;
 
     useEffect(() => {
+      // Ignore the response if the merchant moves to another product before it arrives
+      let stale = false;
+
+      // Start from an empty block, so the previous product's issues never show
+      setLoading(true);
+      setIssues([]);
+      setSavedIssues([]);
+      setCurrentPage(1);
+
       (async function getProductInfo() {
         // Load the issues stored in the product's metafield.
         // getIssues returns the parsed array, or undefined if there are no issues yet
         const productIssues = await getIssues(productId);
+        if (stale) return;
 
         setLoading(false);
         if (Array.isArray(productIssues)) {
@@ -42,6 +53,10 @@ export default async () => {
           setSavedIssues(productIssues);
         }
       })();
+
+      return () => {
+        stale = true;
+      };
     }, [productId]);
 
     const paginatedIssues = useMemo(() => {
