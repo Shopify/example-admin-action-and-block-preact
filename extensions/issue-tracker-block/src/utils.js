@@ -1,6 +1,6 @@
 export async function updateIssues(id, newIssues) {
   // This example uses metafields to store the data. For more information, refer to https://shopify.dev/docs/apps/custom-data/metafields.
-  return await makeGraphQLQuery(
+  const res = await makeGraphQLQuery(
     `mutation SetMetafield($ownerId: ID!, $namespace: String!, $key: String!, $type: String!, $value: String!) {
       metafieldsSet(metafields: [{ownerId: $ownerId, namespace: $namespace, key: $key, type: $type, value: $value}]) {
         metafields {
@@ -19,11 +19,22 @@ export async function updateIssues(id, newIssues) {
     {
       ownerId: id,
       namespace: "$app",
-      key: "issues", 
+      key: "issues",
       type: "json",
       value: JSON.stringify(newIssues),
     },
   );
+
+  // metafieldsSet reports validation problems in userErrors instead of failing the request,
+  // so check both before treating the issues as saved
+  const userErrors = res?.data?.metafieldsSet?.userErrors ?? [];
+  if (res?.errors?.length || userErrors.length) {
+    throw new Error(
+      `Couldn't save the issues: ${JSON.stringify(res?.errors?.length ? res.errors : userErrors)}`,
+    );
+  }
+
+  return res;
 }
 
 export async function getIssues(productId) {

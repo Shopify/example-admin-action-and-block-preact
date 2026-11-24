@@ -29,21 +29,29 @@ export default async () => {
 
     useEffect(() => {
       (async function getProductInfo() {
-        // Only show the block's content if the product has more than one variant
-        const variantsCount = await getVariantsCount(productId);
+        try {
+          // Fetch the variants count and the issues at the same time.
+          // getIssues returns the parsed array, or undefined if there are no issues yet
+          const [variantsCount, productIssues] = await Promise.all([
+            getVariantsCount(productId),
+            getIssues(productId),
+          ]);
 
-        if (variantsCount > 1) {
-          setShouldRender(true);
-        }
-        // [END conditional-block-extension.has-variants]
+          // Only show the block's content if the product has more than one variant
+          if (variantsCount > 1) {
+            setShouldRender(true);
+          }
+          // [END conditional-block-extension.has-variants]
 
-        // getIssues returns the parsed array, or undefined if there are no issues yet
-        const productIssues = await getIssues(productId);
-
-        setLoading(false);
-        if (Array.isArray(productIssues)) {
-          setIssues(productIssues);
-          setSavedIssues(productIssues);
+          if (Array.isArray(productIssues)) {
+            setIssues(productIssues);
+            setSavedIssues(productIssues);
+          }
+        } catch (error) {
+          console.error(error);
+        } finally {
+          // Always leave the loading state, even if a request failed
+          setLoading(false);
         }
       })();
     }, [productId]);
@@ -88,15 +96,16 @@ export default async () => {
       setIssues((currentIssues) =>
         currentIssues.filter((issue) => issue.id !== id),
       );
-      setSavedIssues(newSavedIssues);
-      // Commit the deletion to the database
+      // Commit the deletion to the database, then remember it as saved
       await updateIssues(productId, newSavedIssues);
+      setSavedIssues(newSavedIssues);
     };
 
-    const onSubmit = async () => {
+    const onSubmit = (event) => {
       // Commit changes to the database, then remember them as the saved issues
-      await updateIssues(productId, issues);
-      setSavedIssues(issues);
+      event.waitUntil(
+        updateIssues(productId, issues).then(() => setSavedIssues(issues)),
+      );
     };
 
     const onReset = () => {

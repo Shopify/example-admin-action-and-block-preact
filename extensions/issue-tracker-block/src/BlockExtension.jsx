@@ -86,9 +86,9 @@ export default async () => {
       setIssues((currentIssues) =>
         currentIssues.filter((issue) => issue.id !== id),
       );
-      setSavedIssues(newSavedIssues);
-      // Commit the deletion to the database
+      // Commit the deletion to the database, then remember it as saved
       await updateIssues(productId, newSavedIssues);
+      setSavedIssues(newSavedIssues);
     };
 
     const onSubmit = (event) => {

@@ -90,6 +90,7 @@ export async function getVariantsCount(id) {
   }
 
   const productData = await res.json();
-  return productData.data.product.variantsCount.count;
+  // Treat a failed or empty response as no variants, so callers don't throw
+  return productData?.data?.product?.variantsCount?.count ?? 0;
 }
 // [END conditional-action-extension.utils]
