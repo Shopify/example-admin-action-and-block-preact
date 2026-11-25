@@ -1,7 +1,7 @@
 import { render } from "preact";
 import { useEffect, useMemo, useState } from "preact/hooks";
 
-import { updateIssues, getIssues } from "./utils";
+import { updateIssues, getIssues, useProductId } from "./utils";
 
 export default async () => {
   render(<Extension />, document.body);
@@ -10,34 +10,46 @@ const PAGE_SIZE = 3;
 
 function Extension() {
   // [START connect-block-action.nav-api]
-  const { data, navigation, i18n } = shopify;
+  const { navigation, i18n } = shopify;
   // [END connect-block-action.nav-api]
 
   const [loading, setLoading] = useState(true);
-  const [_, setInitialValues] = useState([]);
   const [issues, setIssues] = useState([]);
+  // The issues as they were last saved, to restore when the merchant discards changes
+  const [savedIssues, setSavedIssues] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
 
-  const productId = data.selected[0].id;
+  // The product being viewed, updated if the merchant moves to another product
+  const productId = useProductId();
   const issuesCount = issues.length;
   const totalPages = issuesCount / PAGE_SIZE;
 
   useEffect(() => {
+    // Ignore the response if the merchant moves to another product before it arrives
+    let stale = false;
+
+    // Start from an empty block, so the previous product's issues never show
+    setLoading(true);
+    setIssues([]);
+    setSavedIssues([]);
+    setCurrentPage(1);
+
     (async function getProductInfo() {
-      // Load the product's metafield of type issues
-      const productData = await getIssues(productId);
+      // Load the issues stored in the product's metafield.
+      // getIssues returns the parsed array, or undefined if there are no issues yet
+      const productIssues = await getIssues(productId);
+      if (stale) return;
 
       setLoading(false);
-      if (productData?.data?.product?.metafield?.value) {
-        const parsedIssues = JSON.parse(
-          productData.data.product.metafield.value,
-        );
-        setInitialValues(
-          parsedIssues.map(({ completed }) => Boolean(completed)),
-        );
-        setIssues(parsedIssues);
+      if (Array.isArray(productIssues)) {
+        setIssues(productIssues);
+        setSavedIssues(productIssues);
       }
     })();
+
+    return () => {
+      stale = true;
+    };
   }, [productId]);
 
   const paginatedIssues = useMemo(() => {
@@ -74,20 +86,28 @@ function Extension() {
   };
 
   const handleDelete = async (id) => {
-    // Create a new array of issues, leaving out the one that you're deleting
-    const newIssues = issues.filter((issue) => issue.id !== id);
-    // Save to the local state
-    setIssues(newIssues);
-    // Commit changes to the database
-    await updateIssues(productId, newIssues);
+    // Create a new array of saved issues, leaving out the one that you're deleting
+    const newSavedIssues = savedIssues.filter((issue) => issue.id !== id);
+    // Remove the issue from the local state, keeping any unsaved status changes
+    setIssues((currentIssues) =>
+      currentIssues.filter((issue) => issue.id !== id),
+    );
+    // Commit the deletion to the database, then remember it as saved
+    await updateIssues(productId, newSavedIssues);
+    setSavedIssues(newSavedIssues);
   };
 
   const onSubmit = (event) => {
-    // Commit changes to the database
-    event.waitUntil(updateIssues(productId, issues));
+    // Commit changes to the database, then remember them as the saved issues
+    event.waitUntil(
+      updateIssues(productId, issues).then(() => setSavedIssues(issues)),
+    );
   };
 
-  const onReset = () => {};
+  const onReset = () => {
+    // The merchant discarded their changes, so restore the last saved issues
+    setIssues(savedIssues);
+  };
 
   if (loading) {
     return (
@@ -134,6 +154,7 @@ function Extension() {
                           <s-select
                             labelAccessibilityVisibility="exclusive"
                             label={i18n.translate("status-column-heading")}
+                            name={`status-${id}`}
                             value={completed ? "completed" : "todo"}
                             onChange={(event) =>
                               handleChange(id, (/** @type {HTMLInputElement} */ (event.target)).value)
